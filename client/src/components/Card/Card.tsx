@@ -5,6 +5,12 @@ import { Link } from "react-router-dom";
 interface CardProps {
     item: {
       id: string | number;
+      price: number;
+      isNew: boolean;
+      title: string;
+      description?: string | undefined;
+      img: string;
+      img2: string;
       attributes: {
         isNew?: boolean;
         img?: {
@@ -29,33 +35,34 @@ interface CardProps {
   }
 
   const Card: React.FC<CardProps> = ({ item }) => {
-  // console.log(item);
   return (
     <Link className="link" to={`/product/${item.id}`}>
       <div className="card">
         <div className="image">
-          {item?.attributes.isNew && <span>New Season</span>}
+          {item?.isNew && <span>New Season</span>}
           <img
             src={
-              process.env.REACT_APP_UPLOAD_URL +
-              (item?.attributes.img?.data?.attributes?.url ?? "")
+              (item.img)
             }
             alt=""
             className="mainImg"
           />
           <img
-            src={
+        /*    src={
               process.env.REACT_APP_UPLOAD_URL +
               (item?.attributes.img2?.data?.attributes?.url ?? "")
+            } */
+            src={
+              (item.img2)
             }
             alt=""
             className="secondImg"
           />
         </div>
-        <h2>{item?.attributes.title}</h2>
+        <h2>{item?.title}</h2>
         <div className="prices">
-          <h3>${item?.oldPrice ?? (item?.attributes.price ?? 0) + 20}</h3>
-          <h3>${item?.attributes.price}</h3>
+          <h3>{item?.oldPrice ?? (item?.price ?? 0) + 20}SEK</h3>
+          <h3>{item?.price}SEK</h3>
         </div>
       </div>
     </Link>

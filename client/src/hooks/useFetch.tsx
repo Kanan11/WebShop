@@ -1,172 +1,96 @@
 import { useEffect, useState } from "react";
 
-const useFetch = <T extends unknown>(url: string) => {
-  // console.log(url)
-  // const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<Error | null>(null);
+const useFetch = <T extends any>(url: string) => {
+  console.log(url)
+  // const [data, setData] = useState<Product[]>([]); // product list
+  const [loading, setLoading] = useState<boolean>(false); // loading boolean
+  const [error, setError] = useState<Error | null>(null); // error handler
   
-  // demo products
+  
   interface Product {
     id: string | number;
-    attributes: {
-      isNew?: boolean;
-      img?: {
-        data?: {
-          attributes?: {
-            url?: string;
-          };
-        };
-      };
-      img2?: {
-        data?: {
-          attributes?: {
-            url?: string;
-          };
-        };
-      };
-      title?: string;
-      price?: number;
-    };
+    img: string;
+    img2: string;
+    attributes: any;
+    discription: string;
+    title: string;
+    isNew?: boolean;
     oldPrice?: number;
+    price?: number;
   }
   
   const data: Product[] = [
     {
       id: 1,
-      attributes: {
-        isNew: true,
-        img: {
-          data: {
-            attributes: {
-              url: "product1-img1.jpg"
-            }
-          }
-        },
-        img2: {
-          data: {
-            attributes: {
-              url: "product1-img2.jpg"
-            }
-          }
-        },
-        title: "Product 1",
-        price: 50
-      },
-      oldPrice: 70
+      img: "url",
+      img2: "url",
+      attributes: "asas",
+      discription: "some text",
+      title: "Product 1",
+      isNew: true,
+      oldPrice: 70,
+      price: 50,
     },
     {
       id: 2,
-      attributes: {
-        isNew: false,
-        img: {
-          data: {
-            attributes: {
-              url: "product2-img1.jpg"
-            }
-          }
-        },
-        img2: {
-          data: {
-            attributes: {
-              url: "product2-img2.jpg"
-            }
-          }
-        },
-        title: "Product 2",
-        price: 100
-      },
-      oldPrice: 120
+      img: "url2",
+      img2: "url2",
+      attributes: "asas",
+      discription: "some text",
+      title: "Product 2",
+      isNew: false,
+      oldPrice: 80,
+      price: 60,
     },
     {
       id: 3,
-      attributes: {
-        isNew: true,
-        img: {
-          data: {
-            attributes: {
-              url: "product3-img1.jpg"
-            }
-          }
-        },
-        img2: {
-          data: {
-            attributes: {
-              url: "product3-img2.jpg"
-            }
-          }
-        },
-        title: "Product 3",
-        price: 75
-      },
-      oldPrice: 90
+      img: "url3",
+      img2: "url3",
+      attributes: "asas",
+      discription: "some text",
+      title: "Product 3",
+      isNew: true,
+      oldPrice: 90,
+      price: 70,
     },
     {
       id: 4,
-      attributes: {
-        isNew: false,
-        img: {
-          data: {
-            attributes: {
-              url: "product4-img1.jpg"
-            }
-          }
-        },
-        img2: {
-          data: {
-            attributes: {
-              url: "product4-img2.jpg"
-            }
-          }
-        },
-        title: "Product 4",
-        price: 60
-      },
-      oldPrice: 80
+      img: "url4",
+      img2: "url44",
+      attributes: "asas",
+      discription: "some text",
+      title: "Product 4",
+      isNew: false,
+      oldPrice: 100,
+      price: 80,
     },
     {
       id: 5,
-      attributes: {
-        isNew: false,
-        img: {
-          data: {
-            attributes: {
-              url: "product5-img1.jpg"
-            }
-          }
-        },
-        img2: {
-          data: {
-            attributes: {
-              url: "product5-img2.jpg"
-            }
-          }
-        },
-        title: "Product 5",
-        price: 90
-      },
-      oldPrice: 100
-    }
+      img: "url5",
+      img2: "url5",
+      attributes: "asas",
+      discription: "some text",
+      title: "Product 5",
+      isNew: true,
+      oldPrice: 110,
+      price: 90,
+    },
   ];
   
-  
-    
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const response = await fetch(url);
-        const json = await response.json() as T;
+        //const json = await response.json() as Product[];
         // setData(json);
-        console.log(json)
-      } catch (error: unknown) {
+      } catch (error: any) {
         if (error instanceof Error) {
           setError(error);
         } else {
           setError(new Error("Unknown error occurred"));
         }
       }
-      
       setLoading(false);
     };
     fetchData();
