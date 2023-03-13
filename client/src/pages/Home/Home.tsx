@@ -1,17 +1,20 @@
-import React from 'react';
-
-interface Props {
-  title?: string;
-  description?: string;
+import React from 'react'
+// import Categories from '../../components/Categories/Categories'
+// import Contact from '../../components/Contact/Contact'
+import FeaturedProducts from '../../components/FeaturedProducts/FeaturedProducts'
+import Slider from '../../components/Slider/Slider'
+import "./Home.scss"
+const Home = () => {
+  return (
+    <div className='home'>
+        <h1>Home page</h1>
+      <Slider/>
+      <FeaturedProducts type="featured"/>
+      {/* <Categories/>
+      <FeaturedProducts type="trending"/>
+      <Contact/> */}
+    </div>
+  )
 }
 
-const Homepage: React.FC<Props> = ({ title, description = 'home page' }) => {
-  return (
-    <div>
-      <h1>{title}</h1>
-      <p>{description}</p>
-    </div>
-  );
-};
-
-export default Homepage;
+export default Home
