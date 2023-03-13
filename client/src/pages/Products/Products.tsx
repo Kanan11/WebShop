@@ -16,10 +16,11 @@ const Products = () => {
   const [maxPrice, setMaxPrice] = useState<number>(1000);
   const [sort, setSort] = useState<"asc" | "desc" | null>(null);
   const [selectedSubCats, setSelectedSubCats] = useState<number[]>([]);
-
+  // console.log(selectedSubCats)
   const { data, loading, error } = useFetch<SubCategory[]>(
     `/sub-categories?[filters][categories][id][$eq]=${catId}`
   );
+  // console.log(loading, JSON.stringify(error))
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
