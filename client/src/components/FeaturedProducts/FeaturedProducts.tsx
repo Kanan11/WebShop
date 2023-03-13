@@ -30,10 +30,11 @@ interface Product {
   };
   oldPrice?: number;
 }
+const data2: Product[] = []
   
 const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ type }) => {
   const { loading, error, data } = useFetch(`/products?populate=*&[filters][type][$eq]=${type}`);
-    console.log(data)
+  console.log(data)
   return (
     <div className="featuredProducts">
       <div className="top">
@@ -51,9 +52,14 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ type }) => {
           ? "Something went wrong!"
           : loading
           ? "loading"
-          : data?.map((item: Product) => (
+          : data2?.map((item: Product) => (
               <Card item={item} key={item.id.toString()} />
             ))}
+      </div>
+      <div>
+        {data2.map((item: Product)=>(
+            <span>hello</span>
+        ))}
       </div>
     </div>
   );
