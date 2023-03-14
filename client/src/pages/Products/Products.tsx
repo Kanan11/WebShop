@@ -18,10 +18,10 @@ const Products = () => {
   const [selectedSubCats, setSelectedSubCats] = useState<number[]>([]);
   // console.log(selectedSubCats)
   const { data, loading, error } = useFetch<SubCategory[]>(
-    `/sub-categories?[filters][categories][id][$eq]=${catId}`
+    process.env.REACT_APP_API_URL ?? `/sub-categories?[filters][categories][id][$eq]=${catId}`
   );
   // console.log(loading, JSON.stringify(error))
-
+  console.log(data)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
     const isChecked = e.target.checked;
@@ -38,7 +38,7 @@ const Products = () => {
       <div className="left">
         <div className="filterItem">
           <h2>Product Categories</h2>
-          {data?.map((item) => (
+          {/* {data?.map((item) => (
             <div className="inputItem" key={item.id}>
               <input
                 type="checkbox"
@@ -50,7 +50,7 @@ const Products = () => {
                 {item.title}
               </label>
             </div>
-          ))}
+          ))} */}
         </div>
         <div className="filterItem">
           <h2>Filter by price</h2>

@@ -36,12 +36,13 @@ interface Product2 {
 const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ type }) => {
   // const { loading, error, data } = useFetch(`http://localhost:1337/api/products`);
   const [data, setData] = useState<Product[]>([])
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState(false);
   useEffect (() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(process.env.REACT_APP_API_URL ?? 'http://localhost:1337/api/products', {
+        setLoading(true)
+        const res = await fetch(process.env.REACT_APP_API_URL ?? + `?populate=*` + 'http://localhost:1337/api/products', {
           headers: {
             Authorization: "Bearer " + process.env.REACT_APP_API_TOKEN
           },
@@ -49,10 +50,14 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ type }) => {
         const json = await res.json()
         setData(json);
         // console.log('api -> json', json)
-      } catch (error) {
-        console.log(error)
-        setData([]);
+      } catch (error: any) {
+        if (error instanceof Error) {
+          setError(error);
+        } else {
+          setError(new Error("Unknown error occurred"));
+        }
       }
+      setLoading(false)
     }
     fetchData();
   }, [])

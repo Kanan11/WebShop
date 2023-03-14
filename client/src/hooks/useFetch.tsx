@@ -81,7 +81,11 @@ const useFetch = <T extends any>(url: string) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await fetch(url);
+        const response = await fetch(url, {
+          headers: {
+            Authorization: "Bearer " + process.env.REACT_APP_API_TOKEN
+          },
+        });
         const json = await response.json() as Product[];
         setData(json);
       } catch (error: any) {
