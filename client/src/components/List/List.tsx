@@ -16,7 +16,6 @@ const List: React.FC<ListProps> = ({ subCats, maxPrice, sort, catId }) => {
       (item) => `&[filters][sub_categories][id][$eq]=${item}`
     )}&[filters][price][$lte]=${maxPrice}&sort=price:${sort}`
   );
-console.log(data)
   return (
     <div className="list">
       {loading

@@ -1,68 +1,62 @@
 import React from "react";
 import "./Card.scss";
 import { Link } from "react-router-dom";
+import { CardProps } from '../../types/types'
 
-interface CardProps {
-    item: {
-      id: string | number;
-      price: number;
-      isNew: boolean;
-      title: string;
-      description?: string | undefined;
-      img: string;
-      img2: string;
-      attributes: {
-        isNew?: boolean;
-        img?: {
-          data?: {
-            attributes?: {
-              url?: string;
-            };
+// moved to external types
+interface CardProps3 {
+  item: {
+    id: string | number;
+    oldPrice?: number;
+    attributes: {
+      isNew?: boolean;
+      img?: {
+        data?: {
+          attributes?: {
+            url?: string;
           };
         };
-        img2?: {
-          data?: {
-            attributes?: {
-              url?: string;
-            };
-          };
-        };
-        title?: string;
-        price?: number;
       };
-      oldPrice?: number;
+      img2?: {
+        data?: {
+          attributes?: {
+            url?: string;
+          };
+        };
+      };
+      title?: string;
+      price?: number;
     };
-  }
+  };
+}
 
-  const Card: React.FC<CardProps> = ({ item }) => {
+const Card: React.FC<CardProps> = (props: CardProps) => {
+  const {item} = props
+  console.log(item);
   return (
     <Link className="link" to={`/product/${item.id}`}>
       <div className="card">
         <div className="image">
-          {item?.isNew && <span>New Season</span>}
+          {item?.attributes?.isNew && <span>New Season</span>}
           <img
             src={
-              (item.img)
+              'url'
             }
             alt=""
             className="mainImg"
           />
           <img
-        /*    src={
-              process.env.REACT_APP_UPLOAD_URL +
-              (item?.attributes.img2?.data?.attributes?.url ?? "")
-            } */
             src={
-              (item.img2)
+              'url'
             }
             alt=""
             className="secondImg"
           />
         </div>
-        <h2>{item?.title}</h2>
+        <h2>{item.attributes?.title}</h2>
         <div className="prices">
-          <h3>{item?.oldPrice ?? (item?.price ?? 0) + 20}SEK</h3>
-          <h3>{item?.price}SEK</h3>
+          <h3>{item.oldPrice}SEK</h3>
+          <h3>{item.attributes?.price}SEK</h3>
         </div>
       </div>
     </Link>
