@@ -10,13 +10,13 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../../redux/cartReducer";
 
 interface Product {
-  item: {
+  item?: {
     id: string | number;
     price: number;
     isNew: boolean;
-    title: string;
+    title?: string;
     description?: string | undefined;
-    img: string;
+    img?: string;
     img2: string;
     attributes: {
       isNew?: boolean;
@@ -40,14 +40,13 @@ interface Product {
     oldPrice?: number;
   };
 }
-/* 
-const Product: React.FC<Product> = () => {
+
+  const Product: React.FC<Product> = () => {
   const { id } = useParams<{ id: string }>();
   const [selectedImg, setSelectedImg] = useState<string>("img");
   const [quantity, setQuantity] = useState<number>(1);
-
   const dispatch = useDispatch();
-  const { data, loading, error } = useFetch<Product>(`/products/${id}?populate=*`);
+  const { data, loading, error } = useFetch(`http://localhost:1337/api/products/${id}?populate=*`);
   const item = data
   console.log(item)
   return (
@@ -60,16 +59,14 @@ const Product: React.FC<Product> = () => {
             <div className="images">
               <img
                 src={
-                  process.env.REACT_APP_UPLOAD_URL +
-                  item.img
+                 'URL'
                 }
                 alt=""
                 onClick={(e) => setSelectedImg("img")}
               />
               <img
                 src={
-                  process.env.REACT_APP_UPLOAD_URL +
-                  item?.img2
+                  'URL'
                 }
                 alt=""
                 onClick={(e) => setSelectedImg("img2")}
@@ -85,9 +82,9 @@ const Product: React.FC<Product> = () => {
             </div>
           </div>
           <div className="right">
-            <h1>{item.title}</h1>
-            <span className="price">{item.price}SEK</span>
-            <p>{item.description}</p>
+            <h1>Some text</h1>
+            <span className="price">199 SEK</span>
+            <p>desc texst</p>
             <div className="quantity">
               <button
                 onClick={() =>
@@ -104,12 +101,12 @@ const Product: React.FC<Product> = () => {
               onClick={() =>
                 dispatch(
                   addToCart({
-                    id: Number(item.id),
-                    title: item.title,
-                    desc: item.description || '',
-                    price: item.price,
-                    img: item.img || '',
-                    quantity,
+                    id: 5,
+                    title: 'item.title',
+                    desc: 'item.description' || '',
+                    price: 100,
+                    img: 'item.img' || '',
+                    quantity: 2,
                   })
                 )
               }
@@ -144,4 +141,4 @@ const Product: React.FC<Product> = () => {
   );
 };
 
-export default Product; */
+export default Product;

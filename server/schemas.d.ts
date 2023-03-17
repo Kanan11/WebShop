@@ -1,60 +1,3 @@
-
-import { Store, Persistor } from 'redux';
-
-export interface CardProps {
-  item: {
-    id: number;
-    oldPrice?: number;
-    attributes: {
-      isNew: boolean;
-      img: {
-        data: {
-          attributes: {
-            url: string;
-          };
-        };
-      };
-      img2: {
-        data: {
-          attributes: {
-            url: string;
-          };
-        };
-      };
-      title: string;
-      price: number;
-    };
-  };
-}
-
-export interface FeaturedProductsProps {
-  type: string;
-}
-
-export interface Product {
-  id: string | number;
-  attributes: {
-    isNew?: boolean;
-    img?: {
-      data?: {
-        attributes?: {
-          url?: string;
-        };
-      };
-    };
-    img2?: {
-      data?: {
-        attributes?: {
-          url?: string;
-        };
-      };
-    };
-    title?: string;
-    price?: number;
-  };
-  oldPrice?: number;
-}
-
 import {
   CollectionTypeSchema,
   StringAttribute,
@@ -76,9 +19,6 @@ import {
   SetMinMax,
   TextAttribute,
   MediaAttribute,
-  CardProps,
-  FeaturedProductsProps,
-  Product,
 } from '@strapi/strapi';
 
 export interface AdminPermission extends CollectionTypeSchema {
@@ -783,7 +723,6 @@ export interface ApiCategoryCategory extends CollectionTypeSchema {
 }
 
 export interface ApiProductProduct extends CollectionTypeSchema {
-  type: string;
   info: {
     singularName: 'product';
     pluralName: 'products';
@@ -890,15 +829,8 @@ declare global {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::category.category': ApiCategoryCategory;
-      'api::product.product': CardProps;
-      'api::product.product': Product;
-      'api::product.product': FeaturedProductsProps;
+      'api::product.product': ApiProductProduct;
       'api::sub-category.sub-category': ApiSubCategorySubCategory;
     }
   }
-}
-
-declare module 'redux/store' {
-  export const store: Store;
-  export const persistor: Persistor;
 }

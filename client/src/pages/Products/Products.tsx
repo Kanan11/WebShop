@@ -12,14 +12,18 @@ interface SubCategory {
 }
 
 const Products = () => {
-  const catId = parseInt(useParams().id || "");
+  // const catId = parseInt(useParams().id || "");
+  const { id } = useParams<string>();
+  const catId = typeof id === 'string' ? parseInt(id, 10) : undefined;
+  const catIdProp = typeof catId === 'number' ? catId : 0;
+  const catIdParam = typeof catId === 'number' ? catId.toString() : '';
   const [maxPrice, setMaxPrice] = useState<number>(1000);
   const [sort, setSort] = useState<"asc" | "desc" | null>(null);
+  // const [sort, setSort] = useState(null);
   const [selectedSubCats, setSelectedSubCats] = useState<number[]>([]);
   // console.log(selectedSubCats)
-  const { data, loading, error } = useFetch<SubCategory[]>(
-    process.env.REACT_APP_API_URL ?? `/sub-categories?[filters][categories][id][$eq]=${catId}`
-  );
+  const apiUrl = process.env.REACT_APP_API_URL ?? `/sub-categories?[filters][categories][id][$eq]=${catIdParam}`;
+  const { data, loading, error } = useFetch(apiUrl);
   // console.log(loading, JSON.stringify(error))
   console.log(data)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +42,7 @@ const Products = () => {
       <div className="left">
         <div className="filterItem">
           <h2>Product Categories</h2>
-          {/* {data?.map((item) => (
+          {data?.map((item) => (
             <div className="inputItem" key={item.id}>
               <input
                 type="checkbox"
@@ -47,10 +51,10 @@ const Products = () => {
                 onChange={handleChange}
               />
               <label htmlFor={item.id.toString()}>
-                {item.title}
+                {item.attributes.title}
               </label>
             </div>
-          ))} */}
+          ))}
         </div>
         <div className="filterItem">
           <h2>Filter by price</h2>
@@ -97,9 +101,9 @@ const Products = () => {
           className="catImg"
           src="https://images.pexels.com/photos/1074535/pexels-photo-1074535.jpeg?auto=compress&cs=tinysrgb&w=1600"
           alt=""
-        />
+        />asdasdfa
         <List
-          catId={catId}
+          catId={catIdProp}
           maxPrice={maxPrice}
           sort={sort}
           subCats={selectedSubCats}

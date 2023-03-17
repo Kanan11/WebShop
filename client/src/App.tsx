@@ -3,12 +3,12 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home/Home";
-//import Product from "./pages/Product/Product";
+import Product from "./pages/Product/Product";
 import Products from "./pages/Products/Products";
 import "./app.scss"
 
 interface LayoutProps {
-  children: ReactElement;
+  children: ReactElement | ReactElement[];
 }
 
 const Layout = ({ children }: LayoutProps) => {
@@ -24,7 +24,8 @@ const Layout = ({ children }: LayoutProps) => {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout>
+    element: 
+    <Layout>
       <Home />
     </Layout>,
     children: [
@@ -36,10 +37,10 @@ const router = createBrowserRouter([
         path: "/products/:id",
         element: <Products />,
       },
-      /* {
+      {
         path: "/product/:id",
         element: <Product />,
-      }, */
+      },
     ],
   },
 ]);

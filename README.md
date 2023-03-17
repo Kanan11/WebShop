@@ -12,3 +12,7 @@ npx create-strapi-app .
 npm run develop
 │ http://localhost:1337/admin │
 
+
+
+
+npm i --save-dev @strapi/strapi
