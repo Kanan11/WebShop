@@ -4,7 +4,7 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { useSelector } from "react-redux";
 import { removeItem, resetCart } from "../../redux/cartReducer";
 import { useDispatch } from "react-redux";
-// import { makeRequest } from "../../makeRequest";
+import { makeRequest } from "../../makeRequest";
 // import { loadStripe } from "@stripe/stripe-js";
 import { CartState, CartItem } from '../../redux/cartReducer';
 

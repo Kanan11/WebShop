@@ -20,7 +20,7 @@ const List: React.FC<ListProps> = ({ subCats, maxPrice, sort, catId }) => {
     <div className="list">
       {loading
         ? "loading"
-        : data?.map((item: any) => <Card item={item.attributes} key={item.id} />)}
+        : data?.map((item: any) => <Card item={item} key={item.id} />)}
     </div>
   );
 };

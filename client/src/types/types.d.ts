@@ -902,3 +902,5 @@ declare module 'redux/store' {
   export const store: Store;
   export const persistor: Persistor;
 }
+export { Store };
+
