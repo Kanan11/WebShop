@@ -13,11 +13,8 @@ import { CartState, CartItem } from '../../redux/cartReducer';
 const Navbar: React.FC = () => {
   const [open,setOpen] = useState(false)
   // debugger
-  const products = useSelector<CartState, CartItem[]>(state => {
-    //console.log(state.cart.products);
-    return state.cart.products;
-  });
-    //console.log(products)
+  const products = useSelector<CartState, CartItem[]>(state => state.cart.products);
+    console.log(products)
   return (
     <div className="navbar">
       <div className="wrapper">

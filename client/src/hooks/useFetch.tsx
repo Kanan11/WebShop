@@ -36,7 +36,7 @@ const useFetch = (url: string) => {
           throw new Error("Network response was not ok");
         }
         const json = await response.json() as ApiResponse;
-        setData(json.data);
+        setData(Array.isArray(json.data) ? json.data : [json.data]);
       } catch (error) {
         setError(true);
       }

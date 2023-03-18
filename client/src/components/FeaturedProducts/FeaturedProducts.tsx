@@ -67,8 +67,6 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ type }) => {
   const { data, loading, error } = useFetch(
     `http://localhost:1337/api/products?populate=*&[filters][type][$eq]=featured/api/products?populate=*&[filters][type][$eq]=${type}`
     );
-    console.log('loading ', loading)
-    console.log('data ', data)
   
   return (
     <div className="featuredProducts">

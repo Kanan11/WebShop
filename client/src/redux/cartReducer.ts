@@ -6,6 +6,7 @@ export interface CartState {
 }
 
 export type CartItem = {
+  attributes: any;
   id: number;
   title: string;
   desc: string;

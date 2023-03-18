@@ -4,18 +4,16 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { useSelector } from "react-redux";
 import { removeItem, resetCart } from "../../redux/cartReducer";
 import { useDispatch } from "react-redux";
-import { makeRequest } from "../../makeRequest";
 // import { loadStripe } from "@stripe/stripe-js";
 import { CartState, CartItem } from '../../redux/cartReducer';
-
 
 const Cart: React.FC = () => {
   // const products = useSelector((state) => state.cart.products);
   const products = useSelector<CartState, CartItem[]>(state => {
-    console.log(state.cart.products);
+    // console.log(state.cart.products);
     return state.cart.products;
   });
-    console.log(products)
+    // console.log(products)
   const dispatch = useDispatch();
 
   const totalPrice = () => {
@@ -48,7 +46,7 @@ const Cart: React.FC = () => {
       <h1>Products in your cart</h1>
       {products?.map((item) => (
         <div className="item" key={item.id}>
-          <img src={process.env.REACT_APP_UPLOAD_URL + item.img} alt="" />
+          <img src={item.img} alt="" />
           <div className="details">
             <h1>{item.title}</h1>
             <p>{item.desc?.substring(0, 100)}</p>

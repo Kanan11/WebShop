@@ -4,8 +4,8 @@ import { Store, Persistor } from 'redux';
 export interface CardProps {
   item: {
     id: number;
-    oldPrice?: number;
     attributes: {
+      oldPrice?: number;
       isNew: boolean;
       img: {
         data: {
