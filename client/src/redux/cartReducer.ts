@@ -20,15 +20,16 @@ const initialState: CartState = {
   products: [],
   cart: null
 };
+
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      console.log(state.products)
-      console.log(action.payload)
+      // console.log(state.products)
+      // console.log(action.payload)
       const item = state.products.find((item) => item.id === action.payload.id);
-      console.log(item)
+      // console.log(item)
       if (item) {
         item.quantity += action.payload.quantity;
       } else {

@@ -12,9 +12,9 @@ import { CartState, CartItem } from '../../redux/cartReducer';
 
 const Navbar: React.FC = () => {
   const [open,setOpen] = useState(false)
-  // debugger
+
   const products = useSelector<CartState, CartItem[]>(state => state.cart.products);
-    console.log(products)
+
   return (
     <div className="navbar">
       <div className="wrapper">
@@ -59,7 +59,7 @@ const Navbar: React.FC = () => {
             <FavoriteBorderOutlinedIcon/>
             <div className="cartIcon" onClick={()=>setOpen(!open)}>
               <ShoppingCartOutlinedIcon/>
-              <span>{products.length}</span>
+              <span>{products.length}</span> {/* TODO change logic */}
             </div>
           </div>
         </div>

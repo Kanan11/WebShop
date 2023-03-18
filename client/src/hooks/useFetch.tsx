@@ -38,12 +38,16 @@ const useFetch = (url: string) => {
         const json = await response.json() as ApiResponse;
         setData(Array.isArray(json.data) ? json.data : [json.data]);
       } catch (error) {
-        setError(true);
+        if (error instanceof Error) {
+          setError(true);
+          console.log('error: ', error);
+        }
       }
       setLoading(false);
     };
     fetchData();
   }, [url]);
+  
 
   return { data, loading, error };
 };

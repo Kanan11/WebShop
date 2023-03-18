@@ -46,7 +46,7 @@ interface Product {
   const [selectedImg, setSelectedImg] = useState<string>("img");
   const [quantity, setQuantity] = useState<number>(1);
   const dispatch = useDispatch();
-  const { data, loading, error } = useFetch(`http://localhost:1337/api/products/${id}?populate=*`);
+  const { data, loading, error } = useFetch(`${process.env.REACT_APP_API_URL}/${id}?populate=*`);
   
   return (
     <div className="product">
@@ -61,14 +61,14 @@ interface Product {
                 <div className="images">
                   <img
                     src={
-                    `http://localhost:1337${product.attributes.img.data.attributes.url}`
+                    `${process.env.REACT_APP_DOMAIN_URL}${product.attributes.img.data.attributes.url}`
                     }
                     alt=""
                     onClick={(e) => setSelectedImg("img")}
                   />
                   <img
                     src={
-                      `http://localhost:1337${product.attributes.img2.data.attributes.url}`
+                      `${process.env.REACT_APP_DOMAIN_URL}${product.attributes.img2.data.attributes.url}`
                     }
                     alt=""
                     onClick={(e) => setSelectedImg("img2")}
@@ -77,7 +77,7 @@ interface Product {
                 <div className="mainImg">
                   <img
                     src={
-                      `http://localhost:1337${product.attributes[selectedImg].data.attributes.url}`
+                      `${process.env.REACT_APP_DOMAIN_URL}${product.attributes[selectedImg].data.attributes.url}`
                     }
                     alt=""
                   />
@@ -93,7 +93,7 @@ interface Product {
               data.map(product => (
                 <div key={typeof product.id === "string" ? parseInt(product.id) : product.id} className="right">
                   <h2>{product.attributes.title}</h2>
-                  <p>{product.attributes.desc}</p>
+                  <p style={{maxWidth: '400px'}}>{product.attributes.desc}</p>
                   <span className="price">{product.attributes.price} SEK</span>
                   <div className="quantity">
                     <button
@@ -117,7 +117,7 @@ interface Product {
                           title: product.attributes.title,
                           desc: product.attributes.desc || '',
                           price: product.attributes.price,
-                          img: `http://localhost:1337${product.attributes.img.data.attributes.url}` || '',
+                          img: `${process.env.REACT_APP_DOMAIN_URL}${product.attributes.img.data.attributes.url}` || '',
                           quantity,
                         })
                       )

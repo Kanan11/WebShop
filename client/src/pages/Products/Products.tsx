@@ -25,7 +25,7 @@ const Products = () => {
   const apiUrl = process.env.REACT_APP_API_URL ?? `/sub-categories?[filters][categories][id][$eq]=${catIdParam}`;
   const { data, loading, error } = useFetch(apiUrl);
   // console.log(loading, JSON.stringify(error))
-  console.log(data)
+  // console.log(data)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
     const isChecked = e.target.checked;

@@ -1,38 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Card from "../Card/Card";
 import "./FeaturedProducts.scss";
-import { Product } from '../../types/types'
-import {ApiProductProduct} from "../../types/types"
+// import { Product } from '../../types/types'
+// import {ApiProductProduct} from "../../types/types"
 import useFetch from "../../hooks/useFetch";
-import { CardProps } from '../../types/types'
+// import { CardProps } from '../../types/types'
 
 interface FeaturedProductsProps {
   type: string;
 }
 
-interface Product2 {
-  id: string | number;
-  attributes: {
-    isNew?: boolean;
-    img?: {
-      data?: {
-        attributes?: {
-          url?: string;
-        };
-      };
-    };
-    img2?: {
-      data?: {
-        attributes?: {
-          url?: string;
-        };
-      };
-    };
-    title?: string;
-    price?: number;
-  };
-  oldPrice?: number;
-}
+// interface Product2 {
+//   id: string | number;
+//   attributes: {
+//     isNew?: boolean;
+//     img?: {
+//       data?: {
+//         attributes?: {
+//           url?: string;
+//         };
+//       };
+//     };
+//     img2?: {
+//       data?: {
+//         attributes?: {
+//           url?: string;
+//         };
+//       };
+//     };
+//     title?: string;
+//     price?: number;
+//   };
+//   oldPrice?: number;
+// }
 
 
 const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ type }) => {
@@ -65,7 +65,7 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ type }) => {
   // }, [])
   // console.log('data ->', data)
   const { data, loading, error } = useFetch(
-    `http://localhost:1337/api/products?populate=*&[filters][type][$eq]=featured/api/products?populate=*&[filters][type][$eq]=${type}`
+    `${process.env.REACT_APP_API_URL}?populate=*&[filters][type][$eq]=featured/api/products?populate=*&[filters][type][$eq]=${type}`
     );
   
   return (
