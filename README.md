@@ -16,3 +16,13 @@ npm run develop
 
 
 npm i --save-dev @strapi/strapi
+
+## how to create Custom Stripe plugin in to Strapi
+
+first create this files
+server/plugins/stripe/index.js
+server/plugins/stripe/package.json
+npm install
+
+then create server/config/plugins.js
+and enable this stripe plugin  

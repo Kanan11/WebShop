@@ -1,0 +1,12 @@
+{
+    "name": "@mycompany/strapi-plugin-stripe",
+    "version": "1.0.0",
+    "description": "A custom Stripe plugin for Strapi.",
+    "main": "index.js",
+    "author": "Kanan Garaisayev <your.email@example.com>",
+    "license": "MIT",
+    "dependencies": {
+      "stripe": "^8.188.0"
+    }
+  }
+  

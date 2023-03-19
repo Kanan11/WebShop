@@ -25,7 +25,7 @@ const Cart: React.FC = () => {
   };
 
   /* const stripePromise = loadStripe(
-    "pk_test_eOTMlr8usx1ctymXqrik0ls700lQCsX2UB"
+    "process.env.STRIPE_API_KEY"
   );
   const handlePayment = async () => {
     try {
@@ -41,6 +41,15 @@ const Cart: React.FC = () => {
       console.log(err);
     }
   }; */
+  const handlePayment = async () => {
+    try {
+      console.log('env', process.env.STRIPE_API_KEY)
+      
+    } catch (error) {
+      console.log(error);
+
+    }
+  }
   return (
     <div className="cart">
       <h1>Products in your cart</h1>
@@ -64,7 +73,7 @@ const Cart: React.FC = () => {
         <span>SUBTOTAL</span>
         <span>{totalPrice()}SEK</span>
       </div>
-      <button /* onClick={handlePayment} */>PROCEED TO CHECKOUT</button>
+      <button onClick={handlePayment} >PROCEED TO CHECKOUT</button>
       <span className="reset" onClick={() => dispatch(resetCart())}>
         Reset Cart
       </span>

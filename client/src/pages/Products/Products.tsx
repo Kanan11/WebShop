@@ -4,36 +4,36 @@ import List from "../../components/List/List";
 import useFetch from "../../hooks/useFetch";
 import "./Products.scss";
 
-interface SubCategory {
-  id: number;
-  attributes: {
-    title: string;
-  };
-}
+// interface SubCategory {
+//   id: number;
+//   attributes: {
+//     title: string;
+//   };
+// }
 
 const Products = () => {
-  // const catId = parseInt(useParams().id || "");
-  const { id } = useParams<string>();
-  const catId = typeof id === 'string' ? parseInt(id, 10) : undefined;
-  const catIdProp = typeof catId === 'number' ? catId : 0;
-  const catIdParam = typeof catId === 'number' ? catId.toString() : '';
+  const catId = parseInt(useParams().id || "");
+  // const { id } = useParams<string>();
+  // const catId = typeof id === 'string' ? parseInt(id, 10) : undefined;
+  // const catIdProp = typeof catId === 'number' ? catId : 0;
+  // const catIdParam = typeof catId === 'number' ? catId.toString() : '';
   const [maxPrice, setMaxPrice] = useState<number>(1000);
-  const [sort, setSort] = useState<"asc" | "desc" | null>(null);
-  // const [sort, setSort] = useState(null);
+  const [sort, setSort] = useState<"asc" | "desc" | null>("asc");
+  // const [sort, setSort] = useState<any>('asc');
   const [selectedSubCats, setSelectedSubCats] = useState<number[]>([]);
   // console.log(selectedSubCats)
-  const apiUrl = process.env.REACT_APP_API_URL ?? `/sub-categories?[filters][categories][id][$eq]=${catIdParam}`;
+  const apiUrl = process.env.REACT_APP_API_URL_SUBCAT + `/sub-categories?[filters][categories][id][$eq]=${catId}`;
   const { data, loading, error } = useFetch(apiUrl);
-  // console.log(loading, JSON.stringify(error))
+  // console.log(apiUrl)
   // console.log(data)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
     const isChecked = e.target.checked;
 
-    setSelectedSubCats((prevSelectedSubCats) =>
+    setSelectedSubCats(
       isChecked
-        ? [...prevSelectedSubCats, value]
-        : prevSelectedSubCats.filter((item) => item !== value)
+        ? [...selectedSubCats, value]
+        : selectedSubCats.filter((item) => item !== value)
     );
   };
 
@@ -41,8 +41,13 @@ const Products = () => {
     <div className="products">
       <div className="left">
         <div className="filterItem">
-          <h2>Product Categories</h2>
-          {data?.map((item) => (
+          <h2>Sub Categories of Categories</h2>
+          {loading ? (
+            "loading..."
+          ) : error ? (
+            "Error loading data. Please try again later."
+          ) : (
+          data?.map((item) => (
             <div className="inputItem" key={item.id}>
               <input
                 type="checkbox"
@@ -54,7 +59,7 @@ const Products = () => {
                 {item.attributes.title}
               </label>
             </div>
-          ))}
+          )))}
         </div>
         <div className="filterItem">
           <h2>Filter by price</h2>
@@ -103,7 +108,7 @@ const Products = () => {
           alt=""
         />
         <List
-          catId={catIdProp}
+          catId={catId}
           maxPrice={maxPrice}
           sort={sort}
           subCats={selectedSubCats}
