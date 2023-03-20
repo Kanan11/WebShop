@@ -21,7 +21,7 @@ const Products = () => {
   const [sort, setSort] = useState<"asc" | "desc" | null>("asc");
   // const [sort, setSort] = useState<any>('asc');
   const [selectedSubCats, setSelectedSubCats] = useState<number[]>([]);
-  // console.log(selectedSubCats)
+  console.log(selectedSubCats)
   const apiUrl = process.env.REACT_APP_API_URL_SUBCAT + `/sub-categories?[filters][categories][id][$eq]=${catId}`;
   const { data, loading, error } = useFetch(apiUrl);
   // console.log(apiUrl)

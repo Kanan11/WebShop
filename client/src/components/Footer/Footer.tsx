@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Footer.scss";
 
 const Footer: React.FC = () => {
@@ -7,11 +8,11 @@ const Footer: React.FC = () => {
       <div className="top">
         <div className="item">
           <h1>Categories</h1>
-          <span>Women</span>
-          <span>Men</span>
-          <span>Shoes</span>
-          <span>Accessories</span>
-          <span>New Arrivals</span>
+          <Link className ="link" to="/products/1">Women</Link>
+          <Link className ="link" to="/products/2">Men</Link>
+          <Link className ="link" to="/products/3">Children</Link>
+          <span>Accessories</span> {/* TODO make new component with all sub-categories */}
+          <span>New Arrivals</span> {/* TODO make new endpoint with filter isNew */}
         </div>
         <div className="item">
           <h1>Links</h1>

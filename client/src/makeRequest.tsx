@@ -1,4 +1,4 @@
-export const makeRequest = (path: string, method: string, data?: any) => {
+export const makeRequest = async (path: string, method: string, data?: any) => {
     const url = `${process.env.REACT_APP_API_URL}/${path}`;
     const headers = {
       Authorization: "bearer " + process.env.REACT_APP_API_TOKEN,
@@ -11,6 +11,7 @@ export const makeRequest = (path: string, method: string, data?: any) => {
       body: JSON.stringify(data),
     };
   
-    return fetch(url, options).then(response => response.json());
+    const response = await fetch(url, options);
+  return await response.json();
   };
   

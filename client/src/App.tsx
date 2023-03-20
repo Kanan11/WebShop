@@ -5,7 +5,10 @@ import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home/Home";
 import Product from "./pages/Product/Product";
 import Products from "./pages/Products/Products";
+import Stores from "./pages/Stores/Stores"
 import "./app.scss"
+import Contact from "./pages/Contact/Contact";
+import About from "./pages/About/About";
 
 interface LayoutProps {
   children: ReactElement | ReactElement[];
@@ -40,6 +43,18 @@ const router = createBrowserRouter([
       {
         path: "/product/:id",
         element: <Product />,
+      },
+      {
+        path: "/products",
+        element: <Stores />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
+      },
+      {
+        path: "/about",
+        element: <About />,
       },
     ],
   },

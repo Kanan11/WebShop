@@ -1,5 +1,5 @@
 const stripe = require('stripe')(process.env.STRIPE_API_KEY);
-export default (_strapi) => {
+export default (strapi) => {
     console.log(process.env.STRIPE_API_KEY)
     console.log(process.env.NODE_ENV);
   return {

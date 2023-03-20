@@ -1,12 +1,12 @@
 import React from "react";
-import "./Contact.scss";
+import "./Contactbar.scss";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import GoogleIcon from "@mui/icons-material/Google";
 import PinterestIcon from "@mui/icons-material/Pinterest";
 
-const Contact: React.FC = () => {
+const ContactBar: React.FC = () => {
   return (
     <div className="contact">
       <div className="wrapper">
@@ -27,4 +27,4 @@ const Contact: React.FC = () => {
   );
 };
 
-export default Contact;
+export default ContactBar;

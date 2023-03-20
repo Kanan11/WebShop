@@ -1,6 +1,6 @@
 import React from 'react'
 import Categories from '../../components/Categories/Categories'
-import Contact from '../../components/Contact/Contact'
+import ContactBar from '../../components/Contactbar/Contactbar'
 import FeaturedProducts from '../../components/FeaturedProducts/FeaturedProducts'
 import Slider from '../../components/Slider/Slider'
 import "./Home.scss"
@@ -8,11 +8,11 @@ import "./Home.scss"
 const Home: React.FC = () => {
   return (
     <div className='home'>
-      <Slider/>
-      <FeaturedProducts type="featured"/>
       <Categories/>
+      <FeaturedProducts type="featured"/>
+      <Slider/>
       <FeaturedProducts type="trending"/>
-      <Contact/>
+      <ContactBar/>
     </div>
   )
 }
