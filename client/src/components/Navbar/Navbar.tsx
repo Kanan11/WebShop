@@ -14,6 +14,7 @@ const Navbar: React.FC = () => {
   const [open,setOpen] = useState(false)
 
   const products = useSelector<CartState, CartItem[]>(state => state.cart.products);
+  const totalItems = products.reduce((total, item) => total + item.quantity, 0);
 
   return (
     <div className="navbar">
@@ -59,7 +60,7 @@ const Navbar: React.FC = () => {
             <FavoriteBorderOutlinedIcon/>
             <div className="cartIcon" onClick={()=>setOpen(!open)}>
               <ShoppingCartOutlinedIcon/>
-              <span>{products.length}</span> {/* TODO change logic */}
+              <span>{totalItems}</span> {/* TODO change logic */}
             </div>
           </div>
         </div>
