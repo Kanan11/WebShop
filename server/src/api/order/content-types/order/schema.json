@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "orders",
+  "info": {
+    "singularName": "order",
+    "pluralName": "orders",
+    "displayName": "order",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "email": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "order_items": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::order-item.order-item"
+    },
+    "session_id": {
+      "type": "string"
+    },
+    "payment_status": {
+      "type": "enumeration",
+      "enum": [
+        "paid",
+        "unpaid",
+        "no_payment_required"
+      ]
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "open",
+        "complete",
+        "expired"
+      ]
+    }
+  }
+}

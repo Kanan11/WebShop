@@ -9,6 +9,8 @@ import Stores from "./pages/Stores/Stores"
 import "./app.scss"
 import Contact from "./pages/Contact/Contact";
 import About from "./pages/About/About";
+import Success from "./pages/Succsess/Succsess";
+import Cancel from "./pages/Cancel/Cancel";
 
 interface LayoutProps {
   children: ReactElement | ReactElement[];
@@ -55,6 +57,14 @@ const router = createBrowserRouter([
       {
         path: "/about",
         element: <About />,
+      },
+      {
+        path: "/checkout/success",
+        element: <Success />,
+      },
+      {
+        path: "checkout/cancel",
+        element: <Cancel />,
       },
     ],
   },

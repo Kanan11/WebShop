@@ -11,21 +11,13 @@ import "./Products.scss";
 //   };
 // }
 
-const Products = () => {
+const Products: React.FC = () => {
   const catId = parseInt(useParams().id || "");
-  // const { id } = useParams<string>();
-  // const catId = typeof id === 'string' ? parseInt(id, 10) : undefined;
-  // const catIdProp = typeof catId === 'number' ? catId : 0;
-  // const catIdParam = typeof catId === 'number' ? catId.toString() : '';
   const [maxPrice, setMaxPrice] = useState<number>(1000);
   const [sort, setSort] = useState<"asc" | "desc" | null>("asc");
-  // const [sort, setSort] = useState<any>('asc');
   const [selectedSubCats, setSelectedSubCats] = useState<number[]>([]);
-  console.log(selectedSubCats)
   const apiUrl = process.env.REACT_APP_API_URL_SUBCAT + `/sub-categories?[filters][categories][id][$eq]=${catId}`;
   const { data, loading, error } = useFetch(apiUrl);
-  // console.log(apiUrl)
-  // console.log(data)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
     const isChecked = e.target.checked;

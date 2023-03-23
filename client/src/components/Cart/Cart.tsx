@@ -1,21 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Cart.scss";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { useSelector } from "react-redux";
 import { removeItem, resetCart } from "../../redux/cartReducer";
 import { useDispatch } from "react-redux";
-// import { loadStripe } from "@stripe/stripe-js";
 import { CartState, CartItem } from '../../redux/cartReducer';
 
-const Cart: React.FC = () => {
-  // const products = useSelector((state) => state.cart.products);
+interface Cart {
+  setOpen?: (value: boolean) => void;
+}
+
+function Cart({ setOpen }: Cart) {
   const products = useSelector<CartState, CartItem[]>(state => {
-    // console.log(state.cart.products);
     return state.cart.products;
   });
-    // console.log(products)
   const dispatch = useDispatch();
-
   const totalPrice = () => {
     let total = 0;
     products.forEach((item) => {
@@ -24,32 +23,41 @@ const Cart: React.FC = () => {
     return total.toFixed(2);
   };
 
-  /* const stripePromise = loadStripe(
-    "process.env.STRIPE_API_KEY"
-  );
   const handlePayment = async () => {
-    try {
-      const stripe = await stripePromise;
-      const res = await makeRequest.post("/orders", {
-        products,
-      });
-      await stripe.redirectToCheckout({
-        sessionId: res.data.stripeSession.id,
-      });
 
-    } catch (err) {
-      console.log(err);
-    }
-  }; */
-  const handlePayment = async () => {
     try {
-      console.log('env', process.env.STRIPE_API_KEY)
-      
+      const requestBody = {
+        userName: ['John', 'Silver'].join(" "),
+        email: 'demo@mail.com',
+        products: products.map(({ id, quantity }) => ({
+          id,
+          quantity,
+        })),}
+            const response = await fetch('http://localhost:1337/api/orders', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
+          });
+          const data = await response.json();
+          console.log('data----', data)
+          dispatch(resetCart())
+          if (response.status === 200) window.location = data.url
+          /* TODO if paid update status at Strapi DB */
     } catch (error) {
-      console.log(error);
-
+      if (error instanceof Error) {
+        console.log('error: ', error);
+      }
     }
   }
+
+  function handleClose() {
+    // if (setOpen) setOpen(false)
+    setOpen && setOpen(false)
+  }
+
+  
   return (
     <div className="cart">
       <h1>Products in your cart</h1>
@@ -74,7 +82,7 @@ const Cart: React.FC = () => {
         <span>{totalPrice()}SEK</span>
       </div>
       <button onClick={handlePayment} >PROCEED TO CHECKOUT</button>
-      <span className="reset" onClick={() => dispatch(resetCart())}>
+      <span className="reset" onClick={() => {handleClose(); dispatch(resetCart());}}>
         Reset Cart
       </span>
     </div>

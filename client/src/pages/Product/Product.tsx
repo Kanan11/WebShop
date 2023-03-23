@@ -46,7 +46,7 @@ interface Product {
   const [selectedImg, setSelectedImg] = useState<string>("img");
   const [quantity, setQuantity] = useState<number>(1);
   const dispatch = useDispatch();
-  const { data, loading, error } = useFetch(`${process.env.REACT_APP_API_URL}/${id}?populate=*`);
+  const { data, loading } = useFetch(`${process.env.REACT_APP_API_URL}/${id}?populate=*`);
   
   return (
     <div className="product">

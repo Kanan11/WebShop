@@ -11,7 +11,6 @@ const Stores: React.FC<StoresProps> = (_props) => {
   const {data, loading, error} = useFetch(
     `${process.env.REACT_APP_API_URL}?populate=*`
   )
-  console.log('all prod data', data)
     return (
     <div className="allprod">
         {loading ? (

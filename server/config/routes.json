@@ -1,0 +1,5 @@
+{
+    "method": "POST",
+    "path": "/api/stripe/payment-intent",
+    "handler": "stripe.createPaymentIntent"
+  }
