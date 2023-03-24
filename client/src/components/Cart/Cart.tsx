@@ -29,10 +29,22 @@ function Cart({ setOpen }: Cart) {
       const requestBody = {
         userName: ['John', 'Silver'].join(" "),
         email: 'demo@mail.com',
+        shippingAddress: {
+          line1: 'street',
+          city: 'city',
+          postal_code: 'zip',
+          country: 'country'
+        },
         products: products.map(({ id, quantity }) => ({
           id,
           quantity,
-        })),}
+        })),
+        shipping_options: {
+          name: 'Standard',
+          price: 99,
+          estimated_delivery_date: '3-5 business days'
+        }
+      }
             const response = await fetch('http://localhost:1337/api/orders', {
             method: 'POST',
             headers: {
@@ -41,9 +53,11 @@ function Cart({ setOpen }: Cart) {
             body: JSON.stringify(requestBody),
           });
           const data = await response.json();
-          console.log('data----', data)
+          console.log('data----', data.url)
           dispatch(resetCart())
           if (response.status === 200) window.location = data.url
+          
+          
           /* TODO if paid update status at Strapi DB */
     } catch (error) {
       if (error instanceof Error) {
