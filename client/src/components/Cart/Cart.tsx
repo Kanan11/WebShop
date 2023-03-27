@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { removeItem, resetCart } from "../../redux/cartReducer";
 import { useDispatch } from "react-redux";
 import { CartState, CartItem } from '../../redux/cartReducer';
+import { Link } from "react-router-dom";
 
 interface Cart {
   setOpen?: (value: boolean) => void;
@@ -23,6 +24,11 @@ function Cart({ setOpen }: Cart) {
     return total.toFixed(2);
   };
 
+  function handleChekout () {
+    console.log('sended');
+    window.location.href = '/checkout';
+  }
+
   const handlePayment = async () => {
 
     try {
@@ -40,7 +46,7 @@ function Cart({ setOpen }: Cart) {
           quantity,
         })),
         shipping_options: {
-          name: 'Standard',
+          name: 'DHL delevery',
           price: 99,
           estimated_delivery_date: '3-5 business days'
         }
@@ -95,7 +101,7 @@ function Cart({ setOpen }: Cart) {
         <span>SUBTOTAL</span>
         <span>{totalPrice()}SEK</span>
       </div>
-      <button onClick={handlePayment} >PROCEED TO CHECKOUT</button>
+      <button onClick={handleChekout} >PROCEED TO CHECKOUT</button>
       <span className="reset" onClick={() => {handleClose(); dispatch(resetCart());}}>
         Reset Cart
       </span>

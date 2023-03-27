@@ -3,6 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { CartItem, CartState, resetCart } from "../../redux/cartReducer";
 import './Cheakout.scss'
 
+interface PropsType {
+  name: string;
+  age: number;
+}
+
 const Cheakout: React.FC = () => {
     const [city, setCity] = useState("Gothenburg");
     const [country, setCountry] = useState("Sweden");
@@ -23,41 +28,50 @@ const Cheakout: React.FC = () => {
         });
         return total.toFixed(2);
     };
+    console.log(products)
     const handlePayment = async () => {
-
+      const handleTest = [city, country, name, surName, zip, phone, phone, street].join(" ");
+      console.log(handleTest)
         try {
           const requestBody = {
             userName: [name, surName].join(" "),
             email: mail,
             shippingAddress: {
-                line1: street,
-                city: city,
-                postal_code: zip,
-                country: country
-              },
+              line1: street,
+              line2: phone,
+              city: city,
+              postal_code: zip,
+              country: country
+            },
             products: products.map(({ id, quantity }) => ({
               id,
               quantity,
-            })),}
-                const response = await fetch('http://localhost:1337/api/orders', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(requestBody),
-              });
-              const data = await response.json();
-              console.log('data----', data.url)
-              dispatch(resetCart())
-              if (response.status === 200) window.location = data.url
-              
-              
-              /* TODO if paid update status at Strapi DB */
-        } catch (error) {
-          if (error instanceof Error) {
-            console.log('error: ', error);
+            })),
+            shipping_options: {
+              name: 'DHL delevery',
+              price: 99,
+              estimated_delivery_date: '3-5 business days'
+            }
           }
-        }
+          const response = await fetch('http://localhost:1337/api/orders', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+          });
+          const data = await response.json();
+          console.log('data----', data.url)
+          dispatch(resetCart())
+          if (response.status === 200) window.location = data.url
+        
+        
+              /* TODO if paid update status at Strapi DB */
+          } catch (error) {
+            if (error instanceof Error) {
+              console.log('error: ', error);
+            }
+          }
       }
       const handleCityChange = (event: { target: { value: SetStateAction<string>; }; }) => {
         setCity(event.target.value);
@@ -82,13 +96,6 @@ const Cheakout: React.FC = () => {
       };
       const handleSurNameChange = (event: { target: { value: SetStateAction<string>; }; }) => {
         setSurName(event.target.value);
-      };
-    
-      const handleTest = (event: { preventDefault: () => void; }) => {
-        event.preventDefault();
-        // handle payment logic here
-        const requestBody = [city, country, name, surName, zip, phone, phone, street].join(" ");
-        console.log(requestBody)
       };
 
     return(
@@ -156,7 +163,7 @@ const Cheakout: React.FC = () => {
                 </form>
             </div>
 
-	        <a className="buy" href="#" onClick={handleTest}>PAY</a>
+            <a className="buy" href="#" onClick={handlePayment}>PAY</a>
         </div>
     )
 }
