@@ -4,7 +4,8 @@
   "info": {
     "singularName": "order-item",
     "pluralName": "order-items",
-    "displayName": "order_item"
+    "displayName": "order_item",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -17,6 +18,9 @@
       "target": "api::product.product"
     },
     "quantity": {
+      "type": "integer"
+    },
+    "product_id": {
       "type": "integer"
     }
   }

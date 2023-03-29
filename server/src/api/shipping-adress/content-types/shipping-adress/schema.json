@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "shipping_adresses",
+  "info": {
+    "singularName": "shipping-adress",
+    "pluralName": "shipping-adresses",
+    "displayName": "shipping_adress",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "street": {
+      "type": "string"
+    },
+    "postal_code": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    }
+  }
+}

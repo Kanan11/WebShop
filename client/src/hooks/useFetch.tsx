@@ -28,9 +28,9 @@ const useFetch = (url: string) => {
       try {
         setLoading(true);
         const response = await fetch(url, {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_API_TOKEN,
-          },
+          // headers: {
+          //   Authorization: "Bearer " + process.env.REACT_APP_API_TOKEN,
+          // },
         });
         if (!response.ok) {
           throw new Error("Network response was not ok");

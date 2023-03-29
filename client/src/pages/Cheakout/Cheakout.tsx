@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { CartItem, CartState, resetCart } from "../../redux/cartReducer";
 import './Cheakout.scss'
 
-interface PropsType {
-  name: string;
-  age: number;
-}
+// interface PropsType {
+//   name: string;
+//   age: number;
+// }
 
 const Cheakout: React.FC = () => {
     const [city, setCity] = useState("Gothenburg");
@@ -21,17 +21,11 @@ const Cheakout: React.FC = () => {
         return state.cart.products;
       });
     const dispatch = useDispatch();
-    const totalPrice = () => {
-        let total = 0;
-        products.forEach((item) => {
-        total += item.quantity * item.price;
-        });
-        return total.toFixed(2);
-    };
+    
     console.log(products)
     const handlePayment = async () => {
-      const handleTest = [city, country, name, surName, zip, phone, phone, street].join(" ");
-      console.log(handleTest)
+      // const handleTest = [city, country, name, surName, zip, phone, mail, street].join(" ");
+      // console.log(handleTest)
         try {
           const requestBody = {
             userName: [name, surName].join(" "),
@@ -61,7 +55,7 @@ const Cheakout: React.FC = () => {
           body: JSON.stringify(requestBody),
           });
           const data = await response.json();
-          console.log('data----', data.url)
+          // console.log('data----', data.url)
           dispatch(resetCart())
           if (response.status === 200) window.location = data.url
         

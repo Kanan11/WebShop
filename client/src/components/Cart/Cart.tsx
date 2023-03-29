@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
 import "./Cart.scss";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { useSelector } from "react-redux";
 import { removeItem, resetCart } from "../../redux/cartReducer";
 import { useDispatch } from "react-redux";
 import { CartState, CartItem } from '../../redux/cartReducer';
-import { Link } from "react-router-dom";
 
 interface Cart {
   setOpen?: (value: boolean) => void;
@@ -25,51 +23,7 @@ function Cart({ setOpen }: Cart) {
   };
 
   function handleChekout () {
-    console.log('sended');
     window.location.href = '/checkout';
-  }
-
-  const handlePayment = async () => {
-
-    try {
-      const requestBody = {
-        userName: ['John', 'Silver'].join(" "),
-        email: 'demo@mail.com',
-        shippingAddress: {
-          line1: 'street',
-          city: 'city',
-          postal_code: 'zip',
-          country: 'country'
-        },
-        products: products.map(({ id, quantity }) => ({
-          id,
-          quantity,
-        })),
-        shipping_options: {
-          name: 'DHL delevery',
-          price: 99,
-          estimated_delivery_date: '3-5 business days'
-        }
-      }
-            const response = await fetch('http://localhost:1337/api/orders', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestBody),
-          });
-          const data = await response.json();
-          console.log('data----', data.url)
-          dispatch(resetCart())
-          if (response.status === 200) window.location = data.url
-          
-          
-          /* TODO if paid update status at Strapi DB */
-    } catch (error) {
-      if (error instanceof Error) {
-        console.log('error: ', error);
-      }
-    }
   }
 
   function handleClose() {
@@ -77,7 +31,6 @@ function Cart({ setOpen }: Cart) {
     setOpen && setOpen(false)
   }
 
-  
   return (
     <div className="cart">
       <h1>Products in your cart</h1>

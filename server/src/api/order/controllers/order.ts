@@ -12,27 +12,29 @@ module.exports = createNewCustomer("api::user.user", ({ strapi }) => ({
         try {
             const customer = await stripe.customers.create({
                 description: 'My Test Customer',
+                email: email,
                     address: {
-                      city: "Göteborg",
-                      country: "Sweden",
-                      line1: "Blåksdfsdfs 22",
-                      line2: "test",
-                      postal_code: "417 10",
+                      city: shippingAddress.city,
+                      country: shippingAddress.country,
+                      line1: shippingAddress.line1,
+                      line2: shippingAddress.line2,
+                      postal_code: shippingAddress.postal_code,
                       state: ""
                     },
-                    phone: "28374628",
-                    name: "John Silver",
+                    phone: shippingAddress.line2,
+                    name: userName,
                     shipping: {
-                        name: "John Doe2",
-                        phone: "2837487658568628",
+                        name: userName,
+                        phone: shippingAddress.line2,
                         address: {
-                          line1: "123 Main St.",
-                          city: "Anytown",
-                          state: "",
-                          postal_code: "12345",
-                          country: "SE",
+                            line1: shippingAddress.line1,
+                            line2: shippingAddress.line2,
+                            city: shippingAddress.city,
+                            state: "",
+                            postal_code: shippingAddress.postal_code,
+                            country: shippingAddress.country,
                         },
-                      },
+                    },
               });
               console.log('customer---->',customer)
 
@@ -48,7 +50,7 @@ module.exports = createNewCustomer("api::user.user", ({ strapi }) => ({
  */
 module.exports = createCoreController("api::order.order", ({ strapi }) => ({
     async create(ctx) {
-        const { products, userName, email, shipping_options } = ctx.request.body;
+        const { products, userName, email, shipping_options, shippingAddress } = ctx.request.body;
         // console.log('shipping_options--->>', ctx.request.body.shippingAddress)
         try {
             const lineItems = await Promise.all(
@@ -69,21 +71,58 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
                     };
                 }));
 
-                const test = await strapi
-                .service("api::order.order")
-                .findOne(20, {populate: 'order_items'})
+                // const test = await strapi
+                // .service("api::order.order")
+                // .findOne(20, {populate: 'order_items'})
                 // console.log("test----->", test);
 
-                
+                // create order with order_items to Strapi
+            const orderItems = [];
+            for (const item of products) {
+                const x = await strapi
+                .service("api::order-item.order-item")
+                .create(
+                    { data: {
+                        quantity: item.quantity,
+                        product_id: item.id,
+                        product: item.id // need for relationship
+                    }}
+                )
+                orderItems.push(x)
+            }
+  
+           const createData = {
+                data: { 
+                    name: userName, 
+                    phone: shippingAddress.line2,
+                    email: email,
+                    order_items: orderItems.map(i => i.id)
+                }
+            }
+            const order = await strapi
+            .service("api::order.order")
+            .create(createData, { includeRelations: true });  
+
+           const createShippingAdress = {
+                data: { 
+                    name: userName, 
+                    phone: shippingAddress.line2,
+                    street: shippingAddress.line1,
+                    postal_code: shippingAddress.postal_code,
+                    country: shippingAddress.country
+                }
+            }
+            const shippingAdress = await strapi
+            .service("api::shipping-adress.shipping-adress")
+            .create(createShippingAdress, { includeRelations: true });  
                     
-                // create a stripe session
+                // create a Stripe session
                 const session = await stripe.checkout.sessions.create({
                     payment_method_types: ["card", "klarna"],
                     // customer_email: email,
                     mode: "payment",
-                    // success_url: `http://localhost:3000/checkout/success?session_id=${session.id}`,
-                    success_url: "http://localhost:3000/checkout/success",
-                    cancel_url: "http://localhost:3000/checkout/cancel",
+                    success_url: `http://localhost:3000/checkout/success?order_id=${order.id}`,
+                    cancel_url: `http://localhost:3000/checkout/cancel?order_id=${order.id}`,
                     line_items: lineItems,
                     metadata: {description: 'some text was reserved!'},
                     // consent_collection: {
@@ -93,7 +132,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
                         allowed_countries: ['SE'],
                     },
                     billing_address_collection: 'auto',
-                    customer: 'cus_NbNg6m6yiVlNgj',
+                    customer: 'cus_NcAFbuWszFORNe',
                     custom_text: {
                         shipping_address: {
                           message: 'Please note that we can\'t guarantee 2-day delivery for PO boxes at this time.',
@@ -102,9 +141,9 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
                       },
                     
                     shipping_options: [
-                        { shipping_rate: 'shr_1Mq0rdD4Lx7TzF99Vyaml6ER' },
                         { shipping_rate: 'shr_1Mq1EGD4Lx7TzF99ex4uDqmX'},
-                          {
+                        { shipping_rate: 'shr_1Mq0rdD4Lx7TzF99Vyaml6ER' },
+                          { // this shipping methode come from front-end
                             shipping_rate_data: {
                                 type: 'fixed_amount',
                                 fixed_amount: {amount: shipping_options.price * 100, currency: 'sek'},
@@ -121,27 +160,20 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
             // const customer = await stripe.customers.retrieve(session.customer);
             // console.log('session shipping --->>>', session.customer);
 
-            // create order to Strapi
-            const createData = {
-                // populate: 'order_items', 
+            // update same order with Stripe payment session.id and two statuses
+            const updateData = {
                 data: { 
-                    name: userName, 
                     session_id: session.id,
-                    phone: '234324',
-                    email: email,
-                    status: session.status,
-                    payment_status: session.payment_status
+                    shipping_adress: shippingAdress.id,
+                    status: session.status, // TODO need to update one more time, after confirmation
+                    payment_status: session.payment_status, // TODO need to update one more time, after confirmation
                 }
             }
-            // console.log('createData', JSON.stringify(createData, null, 2))
-            const order = await strapi
+            await strapi
             .service("api::order.order")
-            // .query("order")
-            .create(createData, { includeRelations: true }); // Try to create Order with Order_Items at Strapi DB
-            console.log("session----->", session)
-            // console.log("order--->>", order)
+            .update(order.id, updateData);  
 
-            return { url: session.url, orderId: order.id, id: session.id };
+            return { url: session.url, id: session.id };
         } catch (error) {
             console.log(error)
             ctx.response.status = 500;
