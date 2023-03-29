@@ -157,7 +157,7 @@ const Cheakout: React.FC = () => {
                 </form>
             </div>
 
-            <a className="buy" href="#" onClick={handlePayment}>PAY</a>
+            <button className="buy" onClick={handlePayment} style={{cursor: "pointer"}}>PAY</button>
         </div>
     )
 }

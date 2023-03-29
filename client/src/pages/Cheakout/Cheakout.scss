@@ -123,8 +123,8 @@
   .buy {
     display: inline-block;
     margin-right: 10px;
-    background: #339DFF;
-    color: #fff;
+    background: #fff;
+    color: #339DFF;
     text-decoration: none;
     font-size: 13px;
     line-height: 38px;
@@ -136,7 +136,7 @@
   }
   
   .buy:hover {
-    background: #fff;
-    color: #339DFF;
+    background: #339DFF;
+    color: #fff;
     box-shadow: 0 4px 4px rgba(83, 100, 255, 0.32);
   }

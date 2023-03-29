@@ -5,7 +5,7 @@ const stripe = require("stripe")(process.env.STRIPE_API_KEY);
  * order controller
  */
 const { createCoreController, createNewCustomer } = require("@strapi/strapi").factories;
-/* 
+/* // save new user to Stripe
 module.exports = createNewCustomer("api::user.user", ({ strapi }) => ({
     async create(ctx) {
         const { products, userName, email, shipping_options } = ctx.request.body;
@@ -160,7 +160,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
             // const customer = await stripe.customers.retrieve(session.customer);
             // console.log('session shipping --->>>', session.customer);
 
-            // update same order with Stripe payment session.id and two statuses
+            // update same order with Stripe payment session.id, two statuses and shipping adress
             const updateData = {
                 data: { 
                     session_id: session.id,
