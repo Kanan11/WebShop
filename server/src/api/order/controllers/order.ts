@@ -1,5 +1,5 @@
 
-// "use strict";
+"use strict";
 const stripe = require("stripe")(process.env.STRIPE_API_KEY);
 /**
  * order controller
@@ -51,7 +51,8 @@ module.exports = createNewCustomer("api::user.user", ({ strapi }) => ({
 module.exports = createCoreController("api::order.order", ({ strapi }) => ({
     async create(ctx) {
         const { products, userName, email, shipping_options, shippingAddress } = ctx.request.body;
-        // console.log('shipping_options--->>', ctx.request.body.shippingAddress)
+        const BASE_URL = ctx.request.headers.origin || 'http://localhost:3000'
+        if (products){
         try {
             const lineItems = await Promise.all(
                 products.map(async (product) => {
@@ -76,7 +77,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
                 // .findOne(20, {populate: 'order_items'})
                 // console.log("test----->", test);
 
-                // create order with order_items to Strapi
+            // create order with order_items to Strapi
             const orderItems = [];
             for (const item of products) {
                 const x = await strapi
@@ -96,6 +97,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
                     name: userName, 
                     phone: shippingAddress.line2,
                     email: email,
+                    payment_status: 'unpaid',
                     order_items: orderItems.map(i => i.id)
                 }
             }
@@ -121,8 +123,8 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
                     payment_method_types: ["card", "klarna"],
                     // customer_email: email,
                     mode: "payment",
-                    success_url: `http://localhost:3000/checkout/success?order_id=${order.id}`,
-                    cancel_url: `http://localhost:3000/checkout/cancel?order_id=${order.id}`,
+                    success_url: `${BASE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}&order_id=${order.id}`,
+                    cancel_url: `${BASE_URL}/checkout/cancel?session_id={CHECKOUT_SESSION_ID}&order_id=${order.id}`,
                     line_items: lineItems,
                     metadata: {description: 'some text was reserved!'},
                     // consent_collection: {
@@ -159,26 +161,78 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
             // const shippment = await stripe.checkout.sessions.retrieve(session.id);
             // const customer = await stripe.customers.retrieve(session.customer);
             // console.log('session shipping --->>>', session.customer);
+            
+            
+            /* ------------- This code should be removed --------------- */
+            if (!session.payment_intent) {
+                // handle the case where payment_intent is not set
+                console.error('PaymentIntent ID is null');
+              } else {
+                if (session.payment_status === 'paid') {
+                  // handle the case where payment was successful
+                  const paymentIntent = await stripe.paymentIntents.retrieve(session.payment_intent);
+                  const clientSecret = paymentIntent.client_secret;
+                  // use the clientSecret to build your webhook endpoint
+                } else if (session.payment_status === 'requires_payment_method') {
+                  // handle the case where payment requires a new payment method
+                  console.error('Payment requires a new payment method');
+                } else {
+                  // handle other cases
+                  console.error('Unknown payment status: ' + session.payment_status);
+                }
+              }
+            /* ------------- This code should be removed --------------- */
+
 
             // update same order with Stripe payment session.id, two statuses and shipping adress
             const updateData = {
                 data: { 
                     session_id: session.id,
                     shipping_adress: shippingAdress.id,
-                    status: session.status, // TODO need to update one more time, after confirmation
-                    payment_status: session.payment_status, // TODO need to update one more time, after confirmation
+                    status: session.status,
+                    payment_status: session.payment_status,
                 }
             }
             await strapi
             .service("api::order.order")
-            .update(order.id, updateData);  
-
+            .update(order.id, updateData);
             return { url: session.url, id: session.id };
         } catch (error) {
             console.log(error)
             ctx.response.status = 500;
             return { error: { message: "There was a problem creating the charge" } };
         }
-    },
+        }else{
+            // if order is paid change status to paid and be sure if it correct order
+            const { sessionId, orderId } = ctx.request.body
+            const session = await stripe.checkout.sessions.retrieve(
+                sessionId
+                )
+                if(session.payment_status === "paid"){
+                    const updateData = {
+                        data: { 
+                            status: session.status, 
+                            payment_status: session.payment_status,
+                        }
+                    }
+                    const checkUp = await strapi
+                    .service("api::order.order")
+                    .findOne(orderId, {populate: 'order_items'})
+                    if (checkUp.session_id === sessionId) {
+                        await strapi
+                        .service("api::order.order")
+                        .update(orderId, updateData);
+                    }else{
+                        console.log('Incorrect orderID')
+                        ctx.throw(400, "It seems like the order wasn't verified, please contact support")
+                        return
+                    }
+                    return {session: session}
+                } else {
+                    ctx.throw(400, "It seems like the order wasn't verified, please contact support")                    
+                    }
+                    return 
+                }
+            }
 }));
 
