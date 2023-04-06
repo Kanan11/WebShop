@@ -11,7 +11,10 @@ import Contact from "./pages/Contact/Contact";
 import About from "./pages/About/About";
 import Success from "./pages/Succsess/Succsess";
 import Cancel from "./pages/Cancel/Cancel";
-import Cheakout from "./pages/Cheakout/Cheakout";
+import Checkout from "./pages/Checkout/Checkout";
+import Register from "./pages/Users/Register/Register";
+import User from "./pages/Users/User/User";
+import Login from "./pages/Users/Login/Login";
 
 interface LayoutProps {
   children: ReactElement | ReactElement[];
@@ -69,7 +72,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/checkout",
-        element: <Cheakout />,
+        element: <Checkout />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/profile",
+        element: <User />,
       },
     ],
   },

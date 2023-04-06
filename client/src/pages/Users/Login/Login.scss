@@ -1,0 +1,142 @@
+.root-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .root-container p {
+    font-size: 22px;
+  }
+  
+  .root-container .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30vh;
+  }
+  
+  .root-container .box {
+    margin: 0 50px;
+  }
+  
+  .root-container .group {
+    position:relative; 
+    margin-bottom:45px;
+  }
+  
+  .root-container input {
+    font-size:17px;
+    padding:10px 10px 10px 5px;
+    display:block;
+    width:300px;
+    border:none;
+    border-bottom:1px solid #757575;
+  }
+  
+  .root-container input:focus {
+    outline:none;
+  }
+  
+  .root-container label {
+    color:#999; 
+    font-size:15px;
+    font-weight:normal;
+    position:absolute;
+    pointer-events:none;
+    left:5px;
+    top:10px;
+    transition:0.2s ease all; 
+    -moz-transition:0.2s ease all; 
+    -webkit-transition:0.2s ease all;
+  }
+  
+  .root-container input:focus ~ label, 
+  .root-container input:valid ~ label {
+    top:-20px;
+    font-size:14px;
+    color:#5264AE;
+  }
+  
+  .root-container .bar {
+    position:relative; 
+    display:block; 
+    width:300px;
+  }
+  
+  .root-container .bar:before, 
+  .root-container .bar:after {
+    content:'';
+    height:2px; 
+    width:0;
+    bottom:1px; 
+    position:absolute;
+    background:#5264AE; 
+    transition:0.2s ease all; 
+    -moz-transition:0.2s ease all; 
+    -webkit-transition:0.2s ease all;
+  }
+  
+  .root-container .bar:before {
+    left:50%;
+  }
+  
+  .root-container .bar:after {
+    right:50%; 
+  }
+  
+  .root-container input:focus ~ .bar:before, 
+  .root-container input:focus ~ .bar:after {
+    width:50%;
+  }
+  
+  .root-container .highlight {
+    position:absolute;
+    height:60%; 
+    width:100px; 
+    top:25%; 
+    left:0;
+    pointer-events:none;
+    opacity:0.5;
+  }
+  
+  .root-container input:focus ~ .highlight {
+    -webkit-animation:inputHighlighter 0.3s ease;
+    -moz-animation:inputHighlighter 0.3s ease;
+    animation:inputHighlighter 0.3s ease;
+  }
+  
+  @-webkit-keyframes inputHighlighter {
+    from { background:#5264AE; }
+    to  { width:0; background:transparent; }
+  }
+  
+  @-moz-keyframes inputHighlighter {
+    from { background:#5264AE; }
+    to  { width:0; background:transparent; }
+  }
+  
+  @keyframes inputHighlighter {
+    from { background:#5264AE; }
+    to  { width:0; background:transparent; }
+  }
+  
+  .login {
+    display: inline-block;
+    margin-right: 10px;
+    background: #fff;
+    color: #339DFF;
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 38px;
+    border-radius: 50px;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    width: 170px;
+    text-align: center;
+  }
+  
+  .login:hover {
+    background: #339DFF;
+    color: #fff;
+    box-shadow: 0 4px 4px rgba(83, 100, 255, 0.32);
+  }

@@ -1,14 +1,14 @@
 import { SetStateAction, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CartItem, CartState, resetCart } from "../../redux/cartReducer";
-import './Cheakout.scss'
+import './Checkout.scss'
 
 // interface PropsType {
 //   name: string;
 //   age: number;
 // }
 
-const Cheakout: React.FC = () => {
+const Checkout: React.FC = () => {
     const [city, setCity] = useState("Gothenburg");
     const [country, setCountry] = useState("Sweden");
     const [mail, setMail] = useState("demoMail@mail.se");
@@ -162,4 +162,4 @@ const Cheakout: React.FC = () => {
     )
 }
 
-export default Cheakout
+export default Checkout
