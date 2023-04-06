@@ -29,7 +29,6 @@ const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
                 "identifier": username,
                 "password": password
             };
-            console.log(url);
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -50,13 +49,13 @@ const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
             }else{
                 
                 console.log('data----', token);
-            }
+            };
             } catch (error) {
               if (error instanceof Error) {
                 console.log('error: ', error);
               }
             }
-        }
+        };
     
         // Get JWT token from a cookie
     function getJwtTokenFromCookie() {
@@ -78,7 +77,6 @@ const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         setJwtToken('');
         window.location.href = '/login';
       }
-    console.log(jwtToken)
     
     // Make authenticated API request with the JWT token
     useEffect(()=>{
@@ -103,7 +101,7 @@ const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
                 console.error(error);
                 });
             }
-    },[])
+    },[jwtToken])
     
    
   return (
@@ -125,8 +123,7 @@ const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
             </li>
             ))}
         </ul>
-        ) : <p>You must be logged in</p>}
-
+        ) : <p>You must be logged in or <a href='/register'>sing in</a></p>}
         </div>
             {users.length === 0 ? (
             <><p>Login forum</p>

@@ -59,7 +59,9 @@ const Navbar: React.FC = () => {
           </div>
           <div className="icons">
             <SearchIcon/>
-            <PersonOutlineOutlinedIcon/>
+            <Link to="/login">
+              <PersonOutlineOutlinedIcon />
+            </Link>            
             <FavoriteBorderOutlinedIcon/>
             <div className="cartIcon" onClick={()=>setOpen(!open)}>
               <ShoppingCartOutlinedIcon/>
