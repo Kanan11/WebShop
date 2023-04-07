@@ -17,7 +17,7 @@ interface LoginProps {
 }
 
 const Login: React.FC<LoginProps> = () => {
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<User>();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const url = 'http://localhost:1337/api/auth/local';
@@ -36,96 +36,94 @@ const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
                 },
                 body: JSON.stringify(requestBody),
             });
+            if (response.status === 400) {
+                console.log('invalid password'); //TODO error handler JSX forget password page
+            }
             const data = await response.json();
             const token = data.jwt;
+            const id = data.user.id;
             if (response.status === 200) {
                 const expires = new Date();
                 // Set the cookie expiration date to 1 hour from now
                 expires.setTime(expires.getTime() + (60 * 60 * 1000)); 
                 
                 // Set the JWT token as a cookie value with an expiration date
-                document.cookie = `jwt=${token};expires=${expires.toUTCString()};path=/;SameSite=None;Secure`;
+                document.cookie = `jwt=${token}; expires=${expires.toUTCString()}; path=/; SameSite=None; Secure`;
+                document.cookie = `userId=${id}; expires=${expires.toUTCString()}; path=/; SameSite=None; Secure`;
                 window.location.href = '/login';
             }else{
-                
-                console.log('data----', token);
+                console.log('data----', response);
             };
             } catch (error) {
               if (error instanceof Error) {
                 console.log('error: ', error);
-              }
             }
+        }
         };
     
         // Get JWT token from a cookie
-    function getJwtTokenFromCookie() {
-        // Get all cookies
-        const cookies = document.cookie.split(';');
-        
-        // Find the JWT cookie and return its value
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.startsWith('jwt=')) {
-                return cookie.substring('jwt='.length, cookie.length);
+        function getJwtTokenAndUserIdFromCookie() {
+            const cookies = document.cookie.split(';');
+            let jwtToken = null;
+            let userId = null;
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith('jwt=')) {
+                    jwtToken = cookie.substring('jwt='.length, cookie.length);
+                } else if (cookie.startsWith('userId=')) {
+                    userId = cookie.substring('userId='.length, cookie.length);
+                }
             }
+            return { jwtToken, userId };
         }
-        return null; // JWT cookie not found
-    };
-    const [jwtToken, setJwtToken] = useState(getJwtTokenFromCookie())
+    const [jwtToken, setJwtToken] = useState(getJwtTokenAndUserIdFromCookie())
+
     function logout() {
         document.cookie = 'jwt=;max-age=0;path=/;SameSite=None;Secure';
-        setJwtToken('');
+        setJwtToken(jwtToken);
         window.location.href = '/login';
       }
     
     // Make authenticated API request with the JWT token
     useEffect(()=>{
-        if (jwtToken) {
-            fetch('http://localhost:1337/api/users', {
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${jwtToken}`
+        async function fetchData() {
+            if (jwtToken.jwtToken) {
+                try {
+                    const res = await fetch(`http://localhost:1337/api/users/${jwtToken.userId}`, {
+                        headers: {
+                            Authorization: `Bearer ${jwtToken.jwtToken}`
+                        }
+                    })
+                    const data = await res.json();
+                    setUsers(data);
+                } catch (error) {
+                    console.log(error);
                 }
-            })
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json(); // convert response to JSON
-                } else {
-                    throw new Error('Failed to load users');
                 }
-                })
-                .then(data => {
-                setUsers(data); // save data to users state
-                })
-                .catch(error => {
-                console.error(error);
-                });
             }
+            fetchData();
     },[jwtToken])
-    
-   
-  return (
-    <>
+
+    return (
+        <>
         <div className="root-container">
         <div>
-        {users && users.length ? (
+        {users ? (
         <ul>
-            {users.map(user => (
-            <li key={user.id}>
-                <p>ID: {user.id}</p>
-                <p>Username: {user.username}</p>
-                <p>Email: {user.email}</p>
-                <p>Provider: {user.provider}</p>
-                <p>Confirmed: {user.confirmed.toString()}</p>
-                <p>Blocked: {user.blocked.toString()}</p>
-                <p>Created At: {user.createdAt}</p>
-                <p>Updated At: {user.updatedAt}</p>
+            <li key={users.id}>
+                <p>ID: {users.id}</p>
+                <p>Username: {users.username}</p>
+                <p>Email: {users.email}</p>
+                <p>Provider: {users.provider}</p>
+                <p>Confirmed: {users.confirmed.toString()}</p>
+                <p>Blocked: {users.blocked.toString()}</p>
+                <p>Created At: {users.createdAt}</p>
+                <p>Updated At: {users.updatedAt}</p>
             </li>
-            ))}
         </ul>
         ) : <p>You must be logged in or <a href='/register'>sing in</a></p>}
         </div>
-            {users.length === 0 ? (
+            {!users ? (
             <><p>Login forum</p>
             <div className="container">
                 <form className="box" onSubmit={handleLogin}>

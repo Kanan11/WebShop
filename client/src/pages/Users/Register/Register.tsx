@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import './Register.scss';
 
-interface User {
-  username: string;
-  password: string;
-  name: string;
-  email: string;
-}
+// interface User {
+//   username: string;
+//   password: string;
+//   name: string;
+//   email: string;
+// }
 
 interface RegisterProps {
   //onRegister: (user: User) => void;
 }
 
 const Register: React.FC<RegisterProps> = () => {
-const [user, setUser] = useState<User[]>([]);
+// const [user, setUser] = useState<User[]>([]);
 const [username, setUsername] = useState('');
 const [password, setPassword] = useState('');
 // const [name, setName] = useState('');
@@ -45,17 +45,18 @@ const url = 'http://localhost:1337/api/auth/local/register';
         });
         const data = await response.json();
         const token = data.jwt;
+        const id = data.user.id;
         if (response.status === 200) {
             const expires = new Date();
             // Set the cookie expiration date to 1 hour from now
             expires.setTime(expires.getTime() + (60 * 60 * 1000)); 
             
             // Set the JWT token as a cookie value with an expiration date
-            document.cookie = `jwt=${token};expires=${expires.toUTCString()};path=/;SameSite=None;Secure`;
+            document.cookie = `jwt=${token}; expires=${expires.toUTCString()}; path=/; SameSite=None; Secure`;
+            document.cookie = `userId=${id}; expires=${expires.toUTCString()}; path=/; SameSite=None; Secure`;
             window.location.href = '/login';
         }else{
-            
-            console.log('data----', token);
+            console.log('data----', data);
         };
         } catch (error) {
           if (error instanceof Error) {
