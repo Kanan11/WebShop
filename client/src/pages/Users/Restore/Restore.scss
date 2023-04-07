@@ -17,6 +17,7 @@
   
   .root-container .box {
     margin: 0 50px;
+    text-align: center;
   }
   
   .root-container .group {
@@ -120,7 +121,7 @@
     to  { width:0; background:transparent; }
   }
   
-  .login {
+  .restore {
     display: inline-block;
     margin-right: 10px;
     background: #fff;
@@ -136,19 +137,9 @@
     text-transform: uppercase;
   }
   
-  .login:hover {
+  .restore:hover {
     background: #339DFF;
     color: #fff;
     box-shadow: 0 4px 4px rgba(83, 100, 255, 0.32);
     font-size: 25px;
   }
-
-  .restore-password {
-    text-decoration: underline;
-    color: #df6d73;
-    margin-right: 15px;
-}
-  .sign-up {
-    text-decoration: underline;
-    color: #339DFF;
-}

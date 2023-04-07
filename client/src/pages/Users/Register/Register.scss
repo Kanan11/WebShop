@@ -131,17 +131,19 @@
     background: #fff;
     color: #339DFF;
     text-decoration: none;
-    font-size: 13px;
+    font-size: 20px;
     line-height: 38px;
     border-radius: 50px;
     -webkit-transition: all 0.3s;
     transition: all 0.3s;
     width: 170px;
     text-align: center;
+    text-transform: uppercase;
   }
   
   .register:hover {
     background: #339DFF;
     color: #fff;
     box-shadow: 0 4px 4px rgba(83, 100, 255, 0.32);
+    font-size: 25px;
   }

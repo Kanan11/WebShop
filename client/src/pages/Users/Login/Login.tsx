@@ -17,9 +17,10 @@ interface LoginProps {
 }
 
 const Login: React.FC<LoginProps> = () => {
-  const [users, setUsers] = useState<User>();
+  const [userLoggedin, setUserLoggedin] = useState<User>();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const url = 'http://localhost:1337/api/auth/local';
 
 const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -38,11 +39,12 @@ const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
             });
             if (response.status === 400) {
                 console.log('invalid password'); //TODO error handler JSX forget password page
+                setErrorMessage('Invalid username or password');
             }
-            const data = await response.json();
-            const token = data.jwt;
-            const id = data.user.id;
             if (response.status === 200) {
+                const data = await response.json();
+                const token = data.jwt;
+                const id = data.user.id;
                 const expires = new Date();
                 // Set the cookie expiration date to 1 hour from now
                 expires.setTime(expires.getTime() + (60 * 60 * 1000)); 
@@ -95,7 +97,7 @@ const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
                         }
                     })
                     const data = await res.json();
-                    setUsers(data);
+                    setUserLoggedin(data);
                 } catch (error) {
                     console.log(error);
                 }
@@ -108,22 +110,22 @@ const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         <>
         <div className="root-container">
         <div>
-        {users ? (
+        {userLoggedin ? (
         <ul>
-            <li key={users.id}>
-                <p>ID: {users.id}</p>
-                <p>Username: {users.username}</p>
-                <p>Email: {users.email}</p>
-                <p>Provider: {users.provider}</p>
-                <p>Confirmed: {users.confirmed.toString()}</p>
-                <p>Blocked: {users.blocked.toString()}</p>
-                <p>Created At: {users.createdAt}</p>
-                <p>Updated At: {users.updatedAt}</p>
+            <li key={userLoggedin.id}>
+                <p>ID: {userLoggedin.id}</p>
+                <p>Username: {userLoggedin.username}</p>
+                <p>Email: {userLoggedin.email}</p>
+                <p>Provider: {userLoggedin.provider}</p>
+                <p>Confirmed: {userLoggedin.confirmed.toString()}</p>
+                <p>Blocked: {userLoggedin.blocked.toString()}</p>
+                <p>Created At: {userLoggedin.createdAt}</p>
+                <p>Updated At: {userLoggedin.updatedAt}</p>
             </li>
         </ul>
-        ) : <p>You must be logged in or <a href='/register'>sing in</a></p>}
+        ) : <p>You must be logged in or <a className='sign-up' href='/register'>sign up</a></p>}
         </div>
-            {!users ? (
+            {!userLoggedin ? (
             <><p>Login forum</p>
             <div className="container">
                 <form className="box" onSubmit={handleLogin}>
@@ -140,6 +142,8 @@ const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
                         <label>Password</label>
                     </div>
                     <br />
+                    {errorMessage && <h3 style={{color:"red"}}>{errorMessage}</h3>}
+                    <a className='restore-password' href='/restore-password'>Forgot password?</a>
                     <button className="login" type="submit" style={{ cursor: "pointer" }}>Login</button>
                 </form>
             </div></>

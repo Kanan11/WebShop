@@ -1,22 +1,13 @@
 import React, { useState } from 'react';
 import './Register.scss';
 
-// interface User {
-//   username: string;
-//   password: string;
-//   name: string;
-//   email: string;
-// }
-
 interface RegisterProps {
   //onRegister: (user: User) => void;
 }
 
 const Register: React.FC<RegisterProps> = () => {
-// const [user, setUser] = useState<User[]>([]);
 const [username, setUsername] = useState('');
 const [password, setPassword] = useState('');
-// const [name, setName] = useState('');
 const [email, setEmail] = useState('');
 const [city, setCity] = useState('');
 const [country, setCountry] = useState('');
@@ -26,9 +17,6 @@ const url = 'http://localhost:1337/api/auth/local/register';
 
   const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // const newUser: User = { username, password, name, email };
-    // setUsers([...users, newUser]);
-    // onRegister(newUser);
     console.log('register')
     try {
         const requestBody = {

@@ -16,6 +16,7 @@
     "@strapi/strapi": "4.7.1",
     "better-sqlite3": "8.0.1",
     "strapi-generate-types": "^1.0.0",
+    "strapi-plugin-entity-relationship-chart": "^4.1.0",
     "strapi-stripe": "^3.2.1",
     "stripe": "^11.17.0"
   },
