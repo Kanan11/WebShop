@@ -18,25 +18,30 @@ interface ApiResponse {
   meta: any;
 }
 
-const useFetch = (url: string) => {
+const useFetch = (url: string, token?: string | undefined) => {
   const [data, setData] = useState<Product[]>([]); // product list
   const [loading, setLoading] = useState<boolean>(false); // loading boolean
   const [error, setError] = useState<boolean>(false); // error handler
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const response = await fetch(url, {
-          // headers: {
-          //   Authorization: "Bearer " + process.env.REACT_APP_API_TOKEN,
-          // },
+          headers: {
+            Authorization: token ? `Bearer ${token}` : ''
+          }
         });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        const json = await response.json() as ApiResponse;
-        setData(Array.isArray(json.data) ? json.data : [json.data]);
+        const json = await response.json();
+        // setData(Array.isArray(json.data) ? json.data : [json.data]);
+        // console.log(json.data)
+        if (json.data === undefined) {
+          setData(json);
+        } else {
+          setData(Array.isArray(json.data) ? json.data : [json.data]);
+        }
       } catch (error) {
         if (error instanceof Error) {
           setError(true);
@@ -46,7 +51,7 @@ const useFetch = (url: string) => {
       setLoading(false);
     };
     fetchData();
-  }, [url]);
+  }, [url, token]);
   
 
   return { data, loading, error };

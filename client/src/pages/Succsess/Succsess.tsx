@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react"
 import useFetch from "../../hooks/useFetch";
+import { useFormattedDate } from '../../hooks/useFormattedDate';
+
 import './Succsess.scss'
 
 interface CheckoutSession {
@@ -121,7 +123,7 @@ interface CheckoutSession {
     const orderId = new URLSearchParams(window.location.search).get('order_id');
     const sessionId = new URLSearchParams(window.location.search).get('session_id');
     const { data, loading, error } = useFetch(`http://localhost:1337/api/orders/${orderId}?populate=*`);
-    
+    console.log(data)
     const [response, setResponse] = useState<CheckoutSession>()
     useEffect(() => {
       async function fetchData() {
@@ -143,6 +145,8 @@ interface CheckoutSession {
       }
       fetchData();
     }, [sessionId, orderId]);
+    const time: any = data.map(i => i.attributes.createdAt)
+    const createdAt = useFormattedDate(time);
 return(
     <div>
         <h1>Thank you!</h1>
@@ -158,6 +162,7 @@ return(
             data.map((product) => (
                 <div key={product.id}>
                   <p>{product.attributes.name}</p>
+                  <p>This order was created at {createdAt}</p>
                   <ul style={{display: "flex", flexWrap: "wrap"}}>
                     {product.attributes.order_items.data.map((item: any) => (
                       <li key={item.id} style={{ border: "1px solid black", padding: "10px", width: "100px", margin: "5px" }}>

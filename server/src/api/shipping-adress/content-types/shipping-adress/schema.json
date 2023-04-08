@@ -26,6 +26,9 @@
     },
     "phone": {
       "type": "string"
+    },
+    "city": {
+      "type": "string"
     }
   }
 }

@@ -7,6 +7,7 @@ interface RegisterProps {
 
 const Register: React.FC<RegisterProps> = () => {
 const [username, setUsername] = useState('');
+const [lastName, setLastName] = useState('');
 const [password, setPassword] = useState('');
 const [email, setEmail] = useState('');
 const [city, setCity] = useState('');
@@ -21,8 +22,12 @@ const url = 'http://localhost:1337/api/auth/local/register';
     try {
         const requestBody = {
             "username": username,
+            "lastname": lastName,
             "email": email,
-            "password": password
+            "password": password,
+            "shipping_adress": {
+                "street": "Korsvagen"
+            }
         };
         const response = await fetch(url, {
             method: 'POST',
@@ -63,7 +68,13 @@ const url = 'http://localhost:1337/api/auth/local/register';
                         <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required/>
                         <span className="highlight"></span>
                         <span className="bar"></span>
-                        <label>Name</label>
+                        <label>First name / Username</label>
+                    </div>
+                    <div className="group">      
+                        <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} required/>
+                        <span className="highlight"></span>
+                        <span className="bar"></span>
+                        <label>Last name</label>
                     </div>
                     <div className="group">      
                         <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} required/>

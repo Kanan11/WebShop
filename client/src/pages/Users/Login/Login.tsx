@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useFormattedDate } from '../../../hooks/useFormattedDate';
 import './Login.scss';
+import useFetch from '../../../hooks/useFetch';
 
 interface User {
+    lastname: string;
     id: number;
     username: string;
     email: string;
@@ -38,7 +41,7 @@ const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
                 body: JSON.stringify(requestBody),
             });
             if (response.status === 400) {
-                console.log('invalid password'); //TODO error handler JSX forget password page
+                console.log('invalid password');
                 setErrorMessage('Invalid username or password');
             }
             if (response.status === 200) {
@@ -78,52 +81,60 @@ const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
             }
             return { jwtToken, userId };
         }
-    const [jwtToken, setJwtToken] = useState(getJwtTokenAndUserIdFromCookie())
+        const [jwtToken, setJwtToken] = useState(getJwtTokenAndUserIdFromCookie())
 
-    function logout() {
-        document.cookie = 'jwt=;max-age=0;path=/;SameSite=None;Secure';
-        setJwtToken(jwtToken);
-        window.location.href = '/login';
-      }
-    
-    // Make authenticated API request with the JWT token
-    useEffect(()=>{
-        async function fetchData() {
-            if (jwtToken.jwtToken) {
-                try {
-                    const res = await fetch(`http://localhost:1337/api/users/${jwtToken.userId}`, {
-                        headers: {
-                            Authorization: `Bearer ${jwtToken.jwtToken}`
-                        }
-                    })
-                    const data = await res.json();
-                    setUserLoggedin(data);
-                } catch (error) {
-                    console.log(error);
+        function logout() {
+            document.cookie = 'jwt=;max-age=0;path=/;SameSite=None;Secure';
+            setJwtToken(jwtToken);
+            window.location.href = '/login';
+        }
+        
+        // Make authenticated API request with the JWT token
+        useEffect(()=>{
+            async function fetchData() {
+                if (jwtToken.jwtToken) {
+                    try {
+                        const res = await fetch(`http://localhost:1337/api/users/${jwtToken.userId}`, {
+                            headers: {
+                                Authorization: `Bearer ${jwtToken.jwtToken}`
+                            }
+                        })
+                        const data = await res.json();
+                        setUserLoggedin(data);
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    }
                 }
-                }
-            }
-            fetchData();
-    },[jwtToken])
+                fetchData();
+        },[jwtToken])
+        // const token = jwtToken.jwtToken
+        // const { data, loading, error } = useFetch(`http://localhost:1337/api/users/${jwtToken.userId}?populate=*`, token ?? ''); // test fetch
+        // console.log('data is ->', data)
+
+        // console.log('user is ->', userLoggedin)
+        const createdAt = useFormattedDate(userLoggedin?.createdAt || '');
+        const updatedAt = useFormattedDate(userLoggedin?.updatedAt || '');
 
     return (
         <>
         <div className="root-container">
         <div>
-        {userLoggedin ? (
-        <ul>
-            <li key={userLoggedin.id}>
-                <p>ID: {userLoggedin.id}</p>
-                <p>Username: {userLoggedin.username}</p>
-                <p>Email: {userLoggedin.email}</p>
-                <p>Provider: {userLoggedin.provider}</p>
-                <p>Confirmed: {userLoggedin.confirmed.toString()}</p>
-                <p>Blocked: {userLoggedin.blocked.toString()}</p>
-                <p>Created At: {userLoggedin.createdAt}</p>
-                <p>Updated At: {userLoggedin.updatedAt}</p>
-            </li>
-        </ul>
-        ) : <p>You must be logged in or <a className='sign-up' href='/register'>sign up</a></p>}
+            {userLoggedin ? (
+            <ul>
+                <li key={userLoggedin.id}>
+                    <p>ID: {userLoggedin.id}</p>
+                    <p>First name: {userLoggedin.username}</p>
+                    <p>Last name: {userLoggedin.lastname}</p>
+                    <p>Email: {userLoggedin.email}</p>
+                    <p>Provider: {userLoggedin.provider}</p>
+                    <p>Confirmed: {userLoggedin.confirmed.toString()}</p>
+                    <p>Blocked: {userLoggedin.blocked.toString()}</p>
+                    <p>Updated At: {updatedAt}</p>
+                    <p>Created At: {createdAt}</p>
+                </li>
+            </ul>
+            ) : <p>You must be logged in or <a className='sign-up' href='/register'>sign up</a></p>}
         </div>
             {!userLoggedin ? (
             <><p>Login forum</p>

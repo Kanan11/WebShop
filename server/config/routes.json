@@ -1,5 +1,14 @@
 {
-    "method": "POST",
-    "path": "/api/stripe/payment-intent",
-    "handler": "stripe.createPaymentIntent"
-  }
+  "routes": [
+    {
+      "method": "POST",
+      "path": "/api/stripe/payment-intent",
+      "handler": "stripe.createPaymentIntent"
+    },
+    {
+      "method": "POST",
+      "path": "/email/sendEmail",
+      "handler": "email.sendEmail"
+    }
+  ]
+}

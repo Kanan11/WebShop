@@ -1,31 +1,30 @@
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CartItem, CartState, resetCart } from "../../redux/cartReducer";
+import { useGetUser } from "../../hooks/useGetUser";
 import './Checkout.scss'
 
-// interface PropsType {
-//   name: string;
-//   age: number;
-// }
-
 const Checkout: React.FC = () => {
+  const { userLoggedIn } = useGetUser();
+  useEffect(() => {
+    setMail(userLoggedIn?.email ?? "");
+    setName(userLoggedIn?.username ?? "");
+  }, [userLoggedIn]);
     const [city, setCity] = useState("Gothenburg");
     const [country, setCountry] = useState("Sweden");
-    const [mail, setMail] = useState("demoMail@mail.se");
+    const [mail, setMail] = useState("");
     const [phone, setPhone] = useState("0767564534");
     const [street, setStreet] = useState("Vasagatan 52");
     const [zip, setZip] = useState("41628");
-    const [name, setName] = useState("John");
+    const [name, setName] = useState("");
     const [surName, setSurName] = useState("Silver");
     const products = useSelector<CartState, CartItem[]>(state => {
         return state.cart.products;
       });
     const dispatch = useDispatch();
-    
+    console.log(userLoggedIn?.username)
     console.log(products)
     const handlePayment = async () => {
-      // const handleTest = [city, country, name, surName, zip, phone, mail, street].join(" ");
-      // console.log(handleTest)
         try {
           const requestBody = {
             userName: [name, surName].join(" "),
@@ -58,9 +57,6 @@ const Checkout: React.FC = () => {
           // console.log('data----', data.url)
           dispatch(resetCart())
           if (response.status === 200) window.location = data.url
-        
-        
-              /* TODO if paid update status at Strapi DB */
           } catch (error) {
             if (error instanceof Error) {
               console.log('error: ', error);
@@ -91,10 +87,9 @@ const Checkout: React.FC = () => {
       const handleSurNameChange = (event: { target: { value: SetStateAction<string>; }; }) => {
         setSurName(event.target.value);
       };
-
     return(
         <div className="root-container">
-            <p>Aditional information</p>
+            <p className="head-text">Aditional information</p>
             <div className="container">
                 <form className="box">
                     <div className="group">      
@@ -125,7 +120,7 @@ const Checkout: React.FC = () => {
                     </div>       
                 </form>
             </div>
-            <p>Shipping information</p>
+            <p className="head-text">Shipping information</p>
             <div className="container">
                 <form className="box">
                     <div className="group">      
@@ -156,7 +151,7 @@ const Checkout: React.FC = () => {
                     </div>       
                 </form>
             </div>
-
+            
             <button className="buy" onClick={handlePayment} style={{cursor: "pointer"}}>PAY</button>
         </div>
     )
