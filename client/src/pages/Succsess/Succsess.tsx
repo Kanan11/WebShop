@@ -130,7 +130,7 @@ interface CheckoutSession {
         try {
           const requestBody = { sessionId, orderId };
           const requestBodyString = JSON.stringify(requestBody);
-          const res = await fetch('http://localhost:1337/api/orders', {
+          const res = await fetch(`http://localhost:1337/api/orders`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -138,6 +138,8 @@ interface CheckoutSession {
             body: requestBodyString,
           });
           const data = await res.json();
+          console.log(requestBodyString)
+          console.log(data)
           setResponse(data);
         } catch (error) {
           console.log(error);

@@ -44,14 +44,15 @@ const Checkout: React.FC = () => {
               name: 'DHL delevery',
               price: 99,
               estimated_delivery_date: '3-5 business days'
-            }
+            },
+            userId: userLoggedIn?.id
           }
           const response = await fetch('http://localhost:1337/api/orders', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestBody),
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
           });
           const data = await response.json();
           // console.log('data----', data.url)

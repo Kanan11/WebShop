@@ -904,3 +904,69 @@ declare module 'redux/store' {
 }
 export { Store };
 
+export interface ShippingAddress {
+  name: string;
+  phone: string;
+  street: string;
+  postal_code: string;
+  city: string;
+  country: string;
+}
+
+export interface Product {
+  id: string | number;
+  img: string;
+  img2: string;
+  attributes: {
+    name: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined;
+    order_items: { data: any[] };
+    shipping_adress: { data: { attributes: ShippingAddress } };
+  };
+  description: string;
+  title: string;
+  isNew?: boolean;
+  oldPrice?: number;
+  price?: number;
+  [key: string]: any;
+}
+
+// get user profile page and useGetUser hook interfaces
+export interface Order {
+  id: number;
+  email: string;
+  name: string;
+  phone: string;
+  session_id: string | null;
+  payment_status: string | null;
+  status: string | null;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+export interface ShippingAddress {
+  id: number;
+  street: string;
+  postal_code: string;
+  country: string;
+  name: string;
+  phone: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  city: string | null;
+}
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  provider: string;
+  confirmed: boolean;
+  blocked: boolean;
+  createdAt: string;
+  updatedAt: string;
+  lastname: string;
+  orders: Order[];
+  shipping_adress: ShippingAddress;
+}

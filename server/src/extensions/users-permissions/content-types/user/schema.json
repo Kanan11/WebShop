@@ -63,11 +63,6 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "orders": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::order.order"
-    },
     "shipping_adress": {
       "type": "relation",
       "relation": "oneToOne",
@@ -75,6 +70,11 @@
     },
     "lastname": {
       "type": "string"
+    },
+    "orders": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::order.order"
     }
   }
 }

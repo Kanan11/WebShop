@@ -13,9 +13,9 @@ import Success from "./pages/Succsess/Succsess";
 import Cancel from "./pages/Cancel/Cancel";
 import Checkout from "./pages/Checkout/Checkout";
 import Register from "./pages/Users/Register/Register";
-import User from "./pages/Users/User/User";
 import Login from "./pages/Users/Login/Login";
 import Restore from "./pages/Users/Restore/Restore";
+import Profile from "./pages/Users/Profile/Profile";
 
 interface LayoutProps {
   children: ReactElement | ReactElement[];
@@ -85,7 +85,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <User />,
+        element: <Profile />,
       },
       {
         path: "/restore-password",

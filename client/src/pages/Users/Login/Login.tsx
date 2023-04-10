@@ -1,19 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useFormattedDate } from '../../../hooks/useFormattedDate';
 import './Login.scss';
-import useFetch from '../../../hooks/useFetch';
-
-interface User {
-    lastname: string;
-    id: number;
-    username: string;
-    email: string;
-    provider: string;
-    confirmed: boolean;
-    blocked: boolean;
-    createdAt: string;
-    updatedAt: string;
-  }
+import Profile from '../Profile/Profile';
+import { User } from '../../../types/types';
 
 interface LoginProps {
   // onLogin: (user: User) => void;
@@ -94,7 +83,7 @@ const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
             async function fetchData() {
                 if (jwtToken.jwtToken) {
                     try {
-                        const res = await fetch(`http://localhost:1337/api/users/${jwtToken.userId}`, {
+                        const res = await fetch(`http://localhost:1337/api/users/${jwtToken.userId}?&populate=*`, {
                             headers: {
                                 Authorization: `Bearer ${jwtToken.jwtToken}`
                             }
@@ -108,20 +97,16 @@ const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
                 }
                 fetchData();
         },[jwtToken])
-        // const token = jwtToken.jwtToken
-        // const { data, loading, error } = useFetch(`http://localhost:1337/api/users/${jwtToken.userId}?populate=*`, token ?? ''); // test fetch
-        // console.log('data is ->', data)
 
-        // console.log('user is ->', userLoggedin)
         const createdAt = useFormattedDate(userLoggedin?.createdAt || '');
         const updatedAt = useFormattedDate(userLoggedin?.updatedAt || '');
 
     return (
         <>
         <div className="root-container">
-        <div>
+        {/* <div>
             {userLoggedin ? (
-            <ul>
+                <ul>
                 <li key={userLoggedin.id}>
                     <p>ID: {userLoggedin.id}</p>
                     <p>First name: {userLoggedin.username}</p>
@@ -133,10 +118,11 @@ const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
                     <p>Updated At: {updatedAt}</p>
                     <p>Created At: {createdAt}</p>
                 </li>
-            </ul>
-            ) : <p>You must be logged in or <a className='sign-up' href='/register'>sign up</a></p>}
-        </div>
-            {!userLoggedin ? (
+                </ul>
+                ) : <p>You must be logged in or <a className='sign-up' href='/register'>sign up</a></p>}
+            </div> */}
+            <Profile />
+            {!jwtToken.jwtToken ? (
             <><p>Login forum</p>
             <div className="container">
                 <form className="box" onSubmit={handleLogin}>

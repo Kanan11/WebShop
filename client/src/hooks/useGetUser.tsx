@@ -1,18 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { User } from '../types/types';
 
-interface User {
-    id: number;
-    username: string;
-    email: string;
-    provider: string;
-    confirmed: boolean;
-    blocked: boolean;
-    createdAt: string;
-    updatedAt: string;
-  }
+
+// interface User {
+//     lastname: string;
+//     orders: any;
+//     id: number;
+//     username: string;
+//     email: string;
+//     provider: string;
+//     confirmed: boolean;
+//     blocked: boolean;
+//     createdAt: string;
+//     updatedAt: string;
+//   }
 
 export function useGetUser() {
   const [userLoggedIn, setUserLoggedIn] = useState<User>();
+  const isMounted = useRef(true);
 
   function getJwtTokenAndUserIdFromCookie() {
     const cookies = document.cookie.split(';');
@@ -31,12 +36,19 @@ export function useGetUser() {
 
   const jwtTokenAndUserId = getJwtTokenAndUserIdFromCookie();
   const { jwtToken, userId } = jwtTokenAndUserId;
+  
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout | null = null;
     async function fetchData() {
       if (jwtToken) {
         try {
-          const res = await fetch(`http://localhost:1337/api/users/${userId}`, {
+          const res = await fetch(`http://localhost:1337/api/users/${userId}?&populate=*`, {
             headers: {
               Authorization: `Bearer ${jwtToken}`,
             },
@@ -48,7 +60,16 @@ export function useGetUser() {
         }
       }
     }
-    fetchData();
+    if (jwtToken && userId) {
+      timeoutId = setTimeout(() => {
+        fetchData();
+      }, 500);
+    }
+    return () => {
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, [jwtToken, userId]);
 
   return { userLoggedIn };

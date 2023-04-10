@@ -50,7 +50,7 @@ module.exports = createNewCustomer("api::user.user", ({ strapi }) => ({
  */
 module.exports = createCoreController("api::order.order", ({ strapi }) => ({
     async create(ctx) {
-        const { products, userName, email, shipping_options, shippingAddress } = ctx.request.body;
+        const { products, userName, email, shipping_options, shippingAddress, userId } = ctx.request.body;
         const BASE_URL = ctx.request.headers.origin || 'http://localhost:3000'
         if (products){
         try {
@@ -191,6 +191,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
                     shipping_adress: shippingAdress.id,
                     status: session.status,
                     payment_status: session.payment_status,
+                    // users_permissions_user: userId
                 }
             }
             await strapi
@@ -202,26 +203,41 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
             ctx.response.status = 500;
             return { error: { message: "There was a problem creating the charge" } };
         }
-        }else{
-            // if order is paid change status to paid and be sure if it correct order
-            const { sessionId, orderId } = ctx.request.body
-            const session = await stripe.checkout.sessions.retrieve(
-                sessionId
-                )
-                if(session.payment_status === "paid"){
-                    const updateData = {
+    }else{
+        // if order is paid change status to paid and be sure if it correct order
+        const { sessionId, orderId } = ctx.request.body
+        const session = await stripe.checkout.sessions.retrieve(
+            sessionId
+            )
+            if(session.payment_status === "paid"){
+                const updateData = {
+                    data: { 
+                        status: session.status, 
+                        payment_status: session.payment_status,
+                    }
+                }
+                const checkUp = await strapi
+                .service("api::order.order")
+                .findOne(orderId, {populate: 'order_items'})
+                if (checkUp.session_id === sessionId) {
+                    await strapi
+                    .service("api::order.order")
+                    .update(orderId, updateData);
+                    
+                    // TODO add order to user table
+                    const updateUser = {
                         data: { 
-                            status: session.status, 
-                            payment_status: session.payment_status,
+                            orders: orderId, 
+                            // shipping_adress: shipping_adressId, // TODO optional if user have many adress
                         }
                     }
-                    const checkUp = await strapi
-                    .service("api::order.order")
-                    .findOne(orderId, {populate: 'order_items'})
-                    if (checkUp.session_id === sessionId) {
-                        await strapi
-                        .service("api::order.order")
-                        .update(orderId, updateData);
+                    // const userService = strapi.plugins['users-permissions'].services.user;
+                    // const user = await userService.findOne({ id: userId }, ['orders']);
+                    // await strapi
+                    // .service("api::users-permissions.user")
+                    // .findOne(userId, {populate: 'order'})
+                    // .update(userId, updateUser);
+                    console.log('-------->', updateUser)
                     }else{
                         console.log('Incorrect orderID')
                         ctx.throw(400, "It seems like the order wasn't verified, please contact support")
