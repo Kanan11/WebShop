@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useFormattedDate } from '../../../hooks/useFormattedDate';
+// import { useFormattedDate } from '../../../hooks/useFormattedDate';
 import './Login.scss';
 import Profile from '../Profile/Profile';
-import { User } from '../../../types/types';
+// import { User } from '../../../types/types';
 
 interface LoginProps {
   // onLogin: (user: User) => void;
 }
 
 const Login: React.FC<LoginProps> = () => {
-  const [userLoggedin, setUserLoggedin] = useState<User>();
+//   const [userLoggedin, setUserLoggedin] = useState<User>();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -79,27 +79,24 @@ const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         }
         
         // Make authenticated API request with the JWT token
-        useEffect(()=>{
-            async function fetchData() {
-                if (jwtToken.jwtToken) {
-                    try {
-                        const res = await fetch(`http://localhost:1337/api/users/${jwtToken.userId}?&populate=*`, {
-                            headers: {
-                                Authorization: `Bearer ${jwtToken.jwtToken}`
-                            }
-                        })
-                        const data = await res.json();
-                        setUserLoggedin(data);
-                    } catch (error) {
-                        console.log(error);
-                    }
-                    }
-                }
-                fetchData();
-        },[jwtToken])
-
-        const createdAt = useFormattedDate(userLoggedin?.createdAt || '');
-        const updatedAt = useFormattedDate(userLoggedin?.updatedAt || '');
+        // useEffect(()=>{
+        //     async function fetchData() {
+        //         if (jwtToken.jwtToken) {
+        //             try {
+        //                 const res = await fetch(`http://localhost:1337/api/users/${jwtToken.userId}?&populate=*`, {
+        //                     headers: {
+        //                         Authorization: `Bearer ${jwtToken.jwtToken}`
+        //                     }
+        //                 })
+        //                 const data = await res.json();
+        //                 setUserLoggedin(data);
+        //             } catch (error) {
+        //                 console.log(error);
+        //             }
+        //             }
+        //         }
+        //         fetchData();
+        // },[jwtToken])
 
     return (
         <>

@@ -69,7 +69,7 @@ const Profile: React.FC = () => {
   }
   
   const user = useGetUser().userLoggedIn
-  console.log(user)
+  // console.log(user)
   
   // const [user, setUser] = useState<User | null>(useGetUser().userLoggedIn as any);
 

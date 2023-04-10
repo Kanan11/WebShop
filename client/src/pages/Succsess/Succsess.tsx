@@ -3,6 +3,7 @@ import useFetch from "../../hooks/useFetch";
 import { useFormattedDate } from '../../hooks/useFormattedDate';
 
 import './Succsess.scss'
+import { useGetUser } from "../../hooks/useGetUser";
 
 interface CheckoutSession {
   session: {
@@ -123,8 +124,9 @@ interface CheckoutSession {
     const orderId = new URLSearchParams(window.location.search).get('order_id');
     const sessionId = new URLSearchParams(window.location.search).get('session_id');
     const { data, loading, error } = useFetch(`http://localhost:1337/api/orders/${orderId}?populate=*`);
-    console.log(data)
+    // console.log(data.map(i=>i.id))
     const [response, setResponse] = useState<CheckoutSession>()
+    // this request for change status to paid
     useEffect(() => {
       async function fetchData() {
         try {
@@ -138,8 +140,8 @@ interface CheckoutSession {
             body: requestBodyString,
           });
           const data = await res.json();
-          console.log(requestBodyString)
-          console.log(data)
+          // console.log(requestBodyString)
+          // console.log(data)
           setResponse(data);
         } catch (error) {
           console.log(error);
@@ -147,6 +149,49 @@ interface CheckoutSession {
       }
       fetchData();
     }, [sessionId, orderId]);
+    
+    // Add order to user profile: 1.Get user from session storage 2.Update user-order-list with new order
+    function getJwtTokenAndUserIdFromCookie() {
+      const cookies = document.cookie.split(';');
+      let jwtToken = null;
+      let userId = null;
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.startsWith('jwt=')) {
+          jwtToken = cookie.substring('jwt='.length, cookie.length);
+        } else if (cookie.startsWith('userId=')) {
+          userId = cookie.substring('userId='.length, cookie.length);
+        }
+      }
+      return { jwtToken, userId };
+    }
+    const jwtTokenAndUserId = getJwtTokenAndUserIdFromCookie();
+    const { jwtToken, userId } = jwtTokenAndUserId;
+    const user = useGetUser().userLoggedIn
+    const updatedOrders = { "orders": user?.orders.map(order => order.id).concat(data.map(i=>i.id) as any)}
+    // console.log(jwtToken)
+    // console.log(userId)
+    // console.log(updatedOrders)
+    useEffect(() => {
+      async function fetchData() {
+        if(updatedOrders) try {
+            const res = await fetch(`http://localhost:1337/api/users/${userId}?populate=*`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${jwtToken}`
+              },
+              body: JSON.stringify(updatedOrders),
+            });
+            const data = await res.json();
+            // console.log('user orderslist was updated', data)
+          } catch (error) {
+            console.log(error);
+          }
+      }
+      fetchData();
+    }, [updatedOrders, jwtToken, userId]);
+
     const time: any = data.map(i => i.attributes.createdAt)
     const createdAt = useFormattedDate(time);
 return(

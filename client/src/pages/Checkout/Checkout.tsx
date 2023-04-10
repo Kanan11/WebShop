@@ -22,8 +22,8 @@ const Checkout: React.FC = () => {
         return state.cart.products;
       });
     const dispatch = useDispatch();
-    console.log(userLoggedIn?.username)
-    console.log(products)
+    // console.log(userLoggedIn?.username)
+    // console.log(products)
     const handlePayment = async () => {
         try {
           const requestBody = {
