@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Register.scss';
+// import { User } from '../../../types/types';
 
 interface RegisterProps {
   //onRegister: (user: User) => void;
 }
+interface User {
+    id: string;
+    name: string;
+    email: string;
+    shipping_address: { id: string }[];
+    // add any other properties here
+  }
 
 const Register: React.FC<RegisterProps> = () => {
 const [username, setUsername] = useState('');
@@ -14,20 +22,47 @@ const [city, setCity] = useState('');
 const [country, setCountry] = useState('');
 const [street, setStreet] = useState('');
 const [zip, setZip] = useState('');
-const url = 'http://localhost:1337/api/auth/local/register';
-
+const url = 'http://localhost:1337/api/auth/local/register?populate=*';
+const shippingUrl = `http://localhost:1337/api/shipping-adresses`;
+const [shippingID, setShippingId] = useState('');
+const [userId, setUserId] = useState('');
+const [jwt, setJwt] = useState('');
+const [userLoggedIn, setUserLoggedIn] = useState<User>();
+  
+  useEffect(() => {
+    async function fetchUser() {
+      if(jwt !== '')
+        try {
+        const res = await fetch(`http://localhost:1337/api/users/${userId}?&populate=*`, {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        });
+        const data = await res.json();
+        setUserLoggedIn(data);
+        console.log(data);
+        console.log(userLoggedIn); // This may not be the updated value
+        console.log('Updated user:', userLoggedIn); // This will show the updated value
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchUser();
+  }, [jwt]);
+  
+  
   const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('register')
+
+    // Firts must create Shipping Adress at Strapi to get ID, then this ID we will use to connect our new user 
+
     try {
+        // Create new User by POST request
         const requestBody = {
-            "username": username,
-            "lastname": lastName,
-            "email": email,
-            "password": password,
-            "shipping_adress": {
-                "street": "Korsvagen"
-            }
+            username: username,
+            lastname: lastName,
+            email: email,
+            password: password,
         };
         const response = await fetch(url, {
             method: 'POST',
@@ -39,23 +74,56 @@ const url = 'http://localhost:1337/api/auth/local/register';
         const data = await response.json();
         const token = data.jwt;
         const id = data.user.id;
+        setUserId(id);
+        setJwt(token)
+        console.log(data.user)
+
+        // Save JWT key and userId to session storage to one heur
         if (response.status === 200) {
             const expires = new Date();
             // Set the cookie expiration date to 1 hour from now
             expires.setTime(expires.getTime() + (60 * 60 * 1000)); 
-            
             // Set the JWT token as a cookie value with an expiration date
             document.cookie = `jwt=${token}; expires=${expires.toUTCString()}; path=/; SameSite=None; Secure`;
             document.cookie = `userId=${id}; expires=${expires.toUTCString()}; path=/; SameSite=None; Secure`;
-            window.location.href = '/login';
+            // window.location.href = '/login';
         }else{
             console.log('data----', data);
         };
-        } catch (error) {
-          if (error instanceof Error) {
+    } catch (error) {
+        if (error instanceof Error) {
             console.log('error: ', error);
-          }
         }
+    }     
+      // Create new shipping adress table at Strapi
+        try {
+            const requestBody = {
+                shipping_adress: {
+                         street: street,
+                         city: city,
+                         postal_code: zip,
+                         country: country,
+                         name: username,
+                         phone: "765476534"
+                }
+             }
+             const response = await fetch(shippingUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            });
+            const data = await response.json();
+            const shippingAdressId = data.id;
+            setShippingId(shippingAdressId);
+            // console.log(shippingAdressId);
+        } catch (error) {
+            console.log(error)
+        }
+
+        // TODO connect relation or update user info by shipping adress
+      
   };
 
   return (

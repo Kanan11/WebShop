@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 // import Login from '../Login/Login';
 import './Profile.scss'
 import { User } from '../../../types/types';
-import { useGetUser } from '../../../hooks/useGetUser';
+import { UseGetUser } from '../../../hooks/useGetUser';
 import { useFormattedDate } from '../../../hooks/useFormattedDate';
 
 const Profile: React.FC = () => {
@@ -68,7 +68,7 @@ const Profile: React.FC = () => {
       }
   }
   
-  const user = useGetUser().userLoggedIn
+  const user = UseGetUser().userLoggedIn
   // console.log(user)
   
   // const [user, setUser] = useState<User | null>(useGetUser().userLoggedIn as any);

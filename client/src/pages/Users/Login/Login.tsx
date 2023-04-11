@@ -36,6 +36,7 @@ const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
             if (response.status === 200) {
                 const data = await response.json();
                 const token = data.jwt;
+                // console.log(data.jwt);
                 const id = data.user.id;
                 const expires = new Date();
                 // Set the cookie expiration date to 1 hour from now

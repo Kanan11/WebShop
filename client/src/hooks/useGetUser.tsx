@@ -15,7 +15,7 @@ import { User } from '../types/types';
 //     updatedAt: string;
 //   }
 
-export function useGetUser() {
+export function UseGetUser() {
   const [userLoggedIn, setUserLoggedIn] = useState<User>();
   const isMounted = useRef(true);
 

@@ -1,11 +1,11 @@
 import { SetStateAction, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CartItem, CartState, resetCart } from "../../redux/cartReducer";
-import { useGetUser } from "../../hooks/useGetUser";
+import { UseGetUser } from "../../hooks/useGetUser";
 import './Checkout.scss'
 
 const Checkout: React.FC = () => {
-  const { userLoggedIn } = useGetUser();
+  const { userLoggedIn } = UseGetUser();
   useEffect(() => {
     setMail(userLoggedIn?.email ?? "");
     setName(userLoggedIn?.username ?? "");

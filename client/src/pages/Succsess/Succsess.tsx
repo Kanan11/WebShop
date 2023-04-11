@@ -1,124 +1,9 @@
 import React, { useEffect, useState } from "react"
 import useFetch from "../../hooks/useFetch";
 import { useFormattedDate } from '../../hooks/useFormattedDate';
-
+import { CheckoutSession } from "../../types/types";
 import './Succsess.scss'
-import { useGetUser } from "../../hooks/useGetUser";
-
-interface CheckoutSession {
-  session: {
-    id: string;
-    object: string;
-    after_expiration: null;
-    allow_promotion_codes: null;
-    amount_subtotal: number;
-    amount_total: number;
-    automatic_tax: {
-      enabled: boolean;
-      status: null;
-    };
-    billing_address_collection: string;
-    cancel_url: string;
-    client_reference_id: null;
-    consent: null;
-    consent_collection: null;
-    created: number;
-    currency: string;
-    currency_conversion: null;
-    custom_fields: any[];
-    custom_text: {
-      shipping_address: {
-        message: string;
-      };
-      submit: {
-        message: string;
-      };
-    };
-    customer: string;
-    customer_creation: null;
-    customer_details: {
-      address: {
-        city: string;
-        country: string;
-        line1: string;
-        line2: string;
-        postal_code: string;
-        state: string;
-      };
-      email: string;
-      name: string;
-      phone: null;
-      tax_exempt: string;
-      tax_ids: any[];
-    };
-    customer_email: null;
-    expires_at: number;
-    invoice: null;
-    invoice_creation: {
-      enabled: boolean;
-      invoice_data: {
-        account_tax_ids: any[];
-        custom_fields: any[];
-        description: null;
-        footer: null;
-        metadata: Record<string, string>;
-        rendering_options: null;
-      };
-    };
-    livemode: boolean;
-    locale: null;
-    metadata: {
-      description: string;
-    };
-    mode: string;
-    payment_intent: string;
-    payment_link: null;
-    payment_method_collection: string;
-    payment_method_options: Record<string, unknown>;
-    payment_method_types: string[];
-    payment_status: string;
-    phone_number_collection: {
-      enabled: boolean;
-    };
-    recovered_from: null;
-    setup_intent: null;
-    shipping_address_collection: {
-      allowed_countries: string[];
-    };
-    shipping_cost: {
-      amount_subtotal: number;
-      amount_tax: number;
-      amount_total: number;
-      shipping_rate: string;
-    };
-    shipping_details: {
-      address: {
-        city: string;
-        country: string;
-        line1: string;
-        line2: string;
-        postal_code: string;
-        state: string;
-      };
-      name: string;
-    };
-    shipping_options: {
-      shipping_amount: number;
-      shipping_rate: string;
-    }[];
-    status: string;
-    submit_type: null;
-    subscription: null;
-    success_url: string;
-    total_details: {
-      amount_discount: number;
-      amount_shipping: number;
-      amount_tax: number;
-    };
-    url: null;
-  };
-}
-
+import { UseGetUser } from "../../hooks/useGetUser";
 
  const Success: React.FC = () => {
     const orderId = new URLSearchParams(window.location.search).get('order_id');
@@ -167,7 +52,7 @@ interface CheckoutSession {
     }
     const jwtTokenAndUserId = getJwtTokenAndUserIdFromCookie();
     const { jwtToken, userId } = jwtTokenAndUserId;
-    const user = useGetUser().userLoggedIn
+    const user = UseGetUser().userLoggedIn
     const updatedOrders = { "orders": user?.orders.map(order => order.id).concat(data.map(i=>i.id) as any)}
     // console.log(jwtToken)
     // console.log(userId)

@@ -9,6 +9,11 @@
       "method": "POST",
       "path": "/email/sendEmail",
       "handler": "email.sendEmail"
+    },
+    {
+      "method": "POST",
+      "path": "/client-register",
+      "handler": "client.create"
     }
   ]
 }
