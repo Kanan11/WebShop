@@ -16,6 +16,7 @@ import Register from "./pages/Users/Register/Register";
 import Login from "./pages/Users/Login/Login";
 import Restore from "./pages/Users/Restore/Restore";
 import Profile from "./pages/Users/Profile/Profile";
+import Order from "./pages/Order/Order";
 
 interface LayoutProps {
   children: ReactElement | ReactElement[];
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
       {
         path: "/product/:id",
         element: <Product />,
+      },
+      {
+        path: "/order/:id",
+        element: <Order />,
       },
       {
         path: "/products",

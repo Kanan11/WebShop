@@ -29,6 +29,9 @@
     },
     "city": {
       "type": "string"
+    },
+    "co_name": {
+      "type": "string"
     }
   }
 }

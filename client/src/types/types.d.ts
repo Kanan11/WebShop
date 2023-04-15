@@ -905,6 +905,7 @@ declare module 'redux/store' {
 export { Store };
 
 export interface ShippingAddress {
+  co_name: string;
   name: string;
   phone: string;
   street: string;
@@ -958,9 +959,11 @@ export interface ShippingAddress {
 }
 
 export interface User {
+  adress: ShippingAddress;
   id: number;
   username: string;
   email: string;
+  phone: number,
   provider: string;
   confirmed: boolean;
   blocked: boolean;

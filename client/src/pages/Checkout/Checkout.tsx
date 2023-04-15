@@ -9,15 +9,24 @@ const Checkout: React.FC = () => {
   useEffect(() => {
     setMail(userLoggedIn?.email ?? "");
     setName(userLoggedIn?.username ?? "");
+    setSurName(userLoggedIn?.lastname ?? '');
+    setStreet(userLoggedIn?.adress?.street ?? '');
+    setZip(userLoggedIn?.adress?.postal_code ?? '');
+    setCity(userLoggedIn?.adress?.city ?? '');
+    setCountry(userLoggedIn?.adress?.country ?? '');
+    setPhone(userLoggedIn?.phone?.toString() ?? '');
+    setCoName(userLoggedIn?.adress?.co_name ?? '');
   }, [userLoggedIn]);
-    const [city, setCity] = useState("Gothenburg");
-    const [country, setCountry] = useState("Sweden");
+  // console.log(userLoggedIn);
+    const [coName, setCoName] = useState('');
+    const [city, setCity] = useState("");
+    const [country, setCountry] = useState("");
     const [mail, setMail] = useState("");
-    const [phone, setPhone] = useState("0767564534");
-    const [street, setStreet] = useState("Vasagatan 52");
-    const [zip, setZip] = useState("41628");
+    const [phone, setPhone] = useState<string | undefined>(undefined);
+    const [street, setStreet] = useState("");
+    const [zip, setZip] = useState("");
     const [name, setName] = useState("");
-    const [surName, setSurName] = useState("Silver");
+    const [surName, setSurName] = useState("");
     const products = useSelector<CartState, CartItem[]>(state => {
         return state.cart.products;
       });
@@ -29,7 +38,9 @@ const Checkout: React.FC = () => {
           const requestBody = {
             userName: [name, surName].join(" "),
             email: mail,
+            phone: phone,
             shippingAddress: {
+              co_name: coName,
               line1: street,
               line2: phone,
               city: city,
@@ -73,9 +84,9 @@ const Checkout: React.FC = () => {
       const handleMailChange = (event: { target: { value: SetStateAction<string>; }; }) => {
         setMail(event.target.value);
       };
-      const handlePhoneChange = (event: { target: { value: SetStateAction<string>; }; }) => {
+      const handlePhoneChange = (event: { target: { value: string }; }) => {
         setPhone(event.target.value);
-      };
+      };      
       const handleStreetChange = (event: { target: { value: SetStateAction<string>; }; }) => {
         setStreet(event.target.value);
       };
@@ -87,6 +98,9 @@ const Checkout: React.FC = () => {
       };
       const handleSurNameChange = (event: { target: { value: SetStateAction<string>; }; }) => {
         setSurName(event.target.value);
+      };
+      const handleCoNameChange = (event: { target: { value: SetStateAction<string>; }; }) => {
+        setCoName(event.target.value);
       };
     return(
         <div className="root-container">
@@ -114,7 +128,7 @@ const Checkout: React.FC = () => {
                         <label>Email</label>
                     </div>       
                     <div className="group">      
-                        <input type="text" value={phone} onChange={handlePhoneChange} required/>
+                        <input type="text" value={phone || ''} onChange={handlePhoneChange} />
                         <span className="highlight"></span>
                         <span className="bar"></span>
                         <label>Phone</label>
@@ -124,6 +138,12 @@ const Checkout: React.FC = () => {
             <p className="head-text">Shipping information</p>
             <div className="container">
                 <form className="box">
+                    <div className="group">      
+                        <input type="text" value={coName} onChange={handleCoNameChange} />
+                        <span className="highlight"></span>
+                        <span className="bar"></span>
+                        <label>c/o name (if exist)</label>
+                    </div>
                     <div className="group">      
                         <input type="text" value={street} onChange={handleStreetChange} required/>
                         <span className="highlight"></span>
@@ -152,7 +172,7 @@ const Checkout: React.FC = () => {
                     </div>       
                 </form>
             </div>
-            
+            <pre style={{marginTop: '80px'}}>** Please change the delivery address in case it is different from the invoice address</pre>
             <button className="buy" onClick={handlePayment} style={{cursor: "pointer"}}>PAY</button>
         </div>
     )

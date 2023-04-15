@@ -50,7 +50,7 @@ module.exports = createNewCustomer("api::user.user", ({ strapi }) => ({
  */
 module.exports = createCoreController("api::order.order", ({ strapi }) => ({
     async create(ctx) {
-        const { products, userName, email, shipping_options, shippingAddress, userId } = ctx.request.body;
+        const { products, userName, email, shipping_options, shippingAddress, userId, phone } = ctx.request.body;
         const BASE_URL = ctx.request.headers.origin || 'http://localhost:3000'
         if (products){
         try {
@@ -95,7 +95,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
            const createData = {
                 data: { 
                     name: userName, 
-                    phone: shippingAddress.line2,
+                    phone: phone,
                     email: email,
                     payment_status: 'unpaid',
                     order_items: orderItems.map(i => i.id)
@@ -104,13 +104,15 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
             const order = await strapi
             .service("api::order.order")
             .create(createData, { includeRelations: true });  
-
+            console.log(shippingAddress);
            const createShippingAdress = {
                 data: { 
-                    name: userName, 
+                    name: userName,
+                    co_name: shippingAddress.co_name,
                     phone: shippingAddress.line2,
                     street: shippingAddress.line1,
                     postal_code: shippingAddress.postal_code,
+                    city: shippingAddress.city,
                     country: shippingAddress.country
                 }
             }

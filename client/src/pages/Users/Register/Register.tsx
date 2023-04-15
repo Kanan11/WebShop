@@ -20,8 +20,10 @@ const [password, setPassword] = useState('');
 const [email, setEmail] = useState('');
 const [city, setCity] = useState('');
 const [country, setCountry] = useState('');
+const [coName, setCoName] = useState('');
 const [street, setStreet] = useState('');
 const [zip, setZip] = useState('');
+const [phone, setPhone] = useState('');
 const url = 'http://localhost:1337/api/auth/local/register?populate=*';
 const shippingUrl = `http://localhost:1337/api/shipping-adresses`;
 const [shippingID, setShippingId] = useState('');
@@ -63,6 +65,14 @@ const [userLoggedIn, setUserLoggedIn] = useState<User>();
             lastname: lastName,
             email: email,
             password: password,
+            phone: phone,
+              adress: {
+                co_name: coName,
+                street: street,
+                postal_code: zip,
+                city: city,
+                country: country
+              }
         };
         const response = await fetch(url, {
             method: 'POST',
@@ -86,7 +96,7 @@ const [userLoggedIn, setUserLoggedIn] = useState<User>();
             // Set the JWT token as a cookie value with an expiration date
             document.cookie = `jwt=${token}; expires=${expires.toUTCString()}; path=/; SameSite=None; Secure`;
             document.cookie = `userId=${id}; expires=${expires.toUTCString()}; path=/; SameSite=None; Secure`;
-            // window.location.href = '/login';
+            window.location.href = '/login';
         }else{
             console.log('data----', data);
         };
@@ -151,12 +161,24 @@ const [userLoggedIn, setUserLoggedIn] = useState<User>();
                         <label>Mail</label>
                     </div>
                     <div className="group">      
+                        <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                        <span className="highlight"></span>
+                        <span className="bar"></span>
+                        <label>Phone</label>
+                    </div>
+                    <div className="group">      
                         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
                         <span className="highlight"></span>
                         <span className="bar"></span>
                         <label>Password</label>
                     </div>
                     <p>Shipping information</p>
+                    <div className="group">      
+                        <input type="text" value={coName} onChange={(e) => setCoName(e.target.value)}/>
+                        <span className="highlight"></span>
+                        <span className="bar"></span>
+                        <label>C/O name (optional)</label>
+                    </div>
                     <div className="group">      
                         <input type="text" value={street} onChange={(e) => setStreet(e.target.value)}/>
                         <span className="highlight"></span>

@@ -75,6 +75,15 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::order.order"
+    },
+    "adress": {
+      "displayName": "adress",
+      "type": "component",
+      "repeatable": false,
+      "component": "shipping.adress"
+    },
+    "phone": {
+      "type": "integer"
     }
   }
 }
